@@ -2,6 +2,7 @@
 #define SOLDIER_APP_MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtWidgets/QSlider>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,7 +16,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void saveFile();
+
 private:
     Ui::MainWindow *ui;
+
+    int getValueFromSlider(QSlider *qSlider) const;
 };
 #endif // SOLDIER_APP_MAINWINDOW_H
