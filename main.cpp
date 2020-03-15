@@ -1,12 +1,11 @@
-#include <iostream>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QPushButton>
+#include "MainWindow.h"
 
-int main(int argc, char ** argv) {
+int main(int argc, char **argv) {
     QApplication app(argc, argv);
-
-    QPushButton button("Hello world !");
-    button.show();
+    MainWindow w;
+    w.show();
 
     return app.exec();
 }
