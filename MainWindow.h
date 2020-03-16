@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <QtWidgets/QSlider>
+#include <QFile>
+#include "Map.h"
+#include "GameConfiguration.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,11 +20,21 @@ public:
     ~MainWindow();
 
 private slots:
-    void saveFile();
+    void saveGameConfiguration();
+    void loadGameConfiguration();
 
 private:
+    Map getMapFromSliders() const;
+    int getValueFromSlider(QSlider *qSlider) const;
+
+    static const QString SETTINGS_FILE_NAME;
+
     Ui::MainWindow *ui;
 
-    int getValueFromSlider(QSlider *qSlider) const;
+    GameConfiguration getGameConfigurationFromFile(QFile &file) const;
+
+    void setGameConfiguration(const GameConfiguration &configuration);
 };
+
+
 #endif // SOLDIER_APP_MAINWINDOW_H
