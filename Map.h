@@ -16,5 +16,4 @@ struct Map {
     QJsonObject convertToJson();
 };
 
-
 #endif //SOLDIERAPP_MAP_H

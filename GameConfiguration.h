@@ -19,5 +19,4 @@ struct GameConfiguration {
     QJsonObject convertToJson();
 };
 
-
 #endif //SOLDIERAPP_GAMECONFIGURATION_H

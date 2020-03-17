@@ -6,6 +6,7 @@
 #include <QFile>
 #include "Map.h"
 #include "GameConfiguration.h"
+#include "AddSoldierDialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -20,21 +21,21 @@ public:
     ~MainWindow();
 
 private slots:
+    void showAddSoldierDialog();
+    void addNewSoldier(const Soldier &soldier);
     void saveGameConfiguration();
     void loadGameConfiguration();
 
 private:
     Map getMapFromSliders() const;
     int getValueFromSlider(QSlider *qSlider) const;
+    void setGameConfiguration(const GameConfiguration &configuration);
+    GameConfiguration getGameConfigurationFromFile(QFile &file) const;
 
     static const QString SETTINGS_FILE_NAME;
 
     Ui::MainWindow *ui;
-
-    GameConfiguration getGameConfigurationFromFile(QFile &file) const;
-
-    void setGameConfiguration(const GameConfiguration &configuration);
+    AddSoldierDialog addSoldierDialog;
 };
-
 
 #endif // SOLDIER_APP_MAINWINDOW_H

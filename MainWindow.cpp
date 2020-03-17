@@ -6,18 +6,30 @@
 #include "./ui_MainWindow.h"
 #include "Map.h"
 #include "GameConfiguration.h"
+#include "AddSoldierDialog.h"
 
 const QString MainWindow::SETTINGS_FILE_NAME = QString("settings.json");
 
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
+    connect(ui->addSoldierButton, SIGNAL(clicked()), this, SLOT(showAddSoldierDialog()));
     connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveGameConfiguration()));
     connect(ui->loadButton, SIGNAL(clicked()), this, SLOT(loadGameConfiguration()));
+    connect(&addSoldierDialog, &AddSoldierDialog::sendAddedSoldier, this, &MainWindow::addNewSoldier);
 }
 
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+void MainWindow::showAddSoldierDialog() {
+    addSoldierDialog.exec();
+}
+
+void MainWindow::addNewSoldier(const Soldier &soldier) {
+    qDebug() << soldier.getFirstName();
+    qDebug() << soldier.getLastName();
 }
 
 void MainWindow::saveGameConfiguration() {
