@@ -23,7 +23,8 @@ public:
 
 private slots:
     void showAddSoldierDialog();
-    void addNewSoldier(const Soldier &soldier);
+    void addSoldier(const Soldier &soldier);
+    void deleteSoldiers();
     void saveGameConfiguration();
     void loadGameConfiguration();
 
@@ -32,11 +33,12 @@ private:
     int getValueFromSlider(QSlider *qSlider) const;
     void setGameConfiguration(const GameConfiguration &configuration);
     GameConfiguration getGameConfigurationFromFile(QFile &file) const;
+    void deleteSelectedSoldiers(const QModelIndexList &selectedRows);
 
     static const QString SETTINGS_FILE_NAME;
-
     Ui::MainWindow *ui;
     AddSoldierDialog addSoldierDialog;
+
     SoldierModel soldierModel;
 };
 

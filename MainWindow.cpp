@@ -17,7 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->addSoldierButton, SIGNAL(clicked()), this, SLOT(showAddSoldierDialog()));
     connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveGameConfiguration()));
     connect(ui->loadButton, SIGNAL(clicked()), this, SLOT(loadGameConfiguration()));
-    connect(&addSoldierDialog, &AddSoldierDialog::sendAddedSoldier, this, &MainWindow::addNewSoldier);
+    connect(ui->deleteSoldierButton, SIGNAL(clicked()), this, SLOT(deleteSoldiers()));
+    connect(&addSoldierDialog, &AddSoldierDialog::sendAddedSoldier, this, &MainWindow::addSoldier);
 }
 
 MainWindow::~MainWindow() {
@@ -28,8 +29,15 @@ void MainWindow::showAddSoldierDialog() {
     addSoldierDialog.exec();
 }
 
-void MainWindow::addNewSoldier(const Soldier &soldier) {
+void MainWindow::addSoldier(const Soldier &soldier) {
     soldierModel.addSoldier(soldier);
+}
+
+void MainWindow::deleteSoldiers() {
+    const QItemSelectionModel *selectionModel = ui->soldiersTable->selectionModel();
+    const QModelIndexList &selectedRows = selectionModel->selectedRows();
+
+    deleteSelectedSoldiers(selectedRows);
 }
 
 void MainWindow::saveGameConfiguration() {
@@ -85,4 +93,11 @@ void MainWindow::setGameConfiguration(const GameConfiguration &configuration) {
     ui->redSlider->setValue(map.red);
     ui->greenSlider->setValue(map.green);
     ui->blueSlider->setValue(map.blue);
+}
+
+void MainWindow::deleteSelectedSoldiers(const QModelIndexList &selectedRows) {
+    foreach (QModelIndex index, selectedRows) {
+        const int row = index.row();
+        soldierModel.deleteSoldier(row);
+    }
 }

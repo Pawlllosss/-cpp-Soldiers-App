@@ -16,6 +16,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     void addSoldier(const Soldier &soldier);
+    void deleteSoldier(const int row);
 
 private:
     std::vector<Soldier> soldiers;

@@ -69,6 +69,12 @@ void SoldierModel::addSoldier(const Soldier &soldier) {
     endInsertRows();
 }
 
+void SoldierModel::deleteSoldier(const int row) {
+    beginRemoveRows(QModelIndex(), row, row);
+    soldiers.erase(soldiers.begin() + row);
+    endRemoveRows();
+}
+
 QVariant SoldierModel::tryToGetFieldFromSoldier(const QModelIndex &index) const {
     const int row = index.row();
     const int column = index.column();
