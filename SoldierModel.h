@@ -15,14 +15,13 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
+    void addSoldier(const Soldier &soldier);
 
 private:
     std::vector<Soldier> soldiers;
 
     QVariant getFieldFromSoldier(const int row, const int column) const;
-
     QVariant tryToGetFieldFromSoldier(const QModelIndex &index) const;
-
     void updateSoldierInModel(const QVariant &value, const int row, const int column);
 };
 

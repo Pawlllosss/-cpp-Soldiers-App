@@ -29,8 +29,7 @@ void MainWindow::showAddSoldierDialog() {
 }
 
 void MainWindow::addNewSoldier(const Soldier &soldier) {
-    qDebug() << soldier.getFirstName();
-    qDebug() << soldier.getLastName();
+    soldierModel.addSoldier(soldier);
 }
 
 void MainWindow::saveGameConfiguration() {

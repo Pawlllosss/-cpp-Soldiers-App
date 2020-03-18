@@ -61,6 +61,14 @@ Qt::ItemFlags SoldierModel::flags(const QModelIndex &index) const {
     return Qt::ItemIsEditable | QAbstractTableModel::flags(index);
 }
 
+void SoldierModel::addSoldier(const Soldier &soldier) {
+    int newRow = rowCount() + 1;
+
+    beginInsertRows(QModelIndex(), newRow, newRow);
+    soldiers.emplace_back(soldier);
+    endInsertRows();
+}
+
 QVariant SoldierModel::tryToGetFieldFromSoldier(const QModelIndex &index) const {
     const int row = index.row();
     const int column = index.column();
