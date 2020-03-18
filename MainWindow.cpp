@@ -13,6 +13,7 @@ const QString MainWindow::SETTINGS_FILE_NAME = QString("settings.json");
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
+    ui->soldiersTable->setModel(&soldierModel);
     connect(ui->addSoldierButton, SIGNAL(clicked()), this, SLOT(showAddSoldierDialog()));
     connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveGameConfiguration()));
     connect(ui->loadButton, SIGNAL(clicked()), this, SLOT(loadGameConfiguration()));

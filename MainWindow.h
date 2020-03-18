@@ -7,6 +7,7 @@
 #include "Map.h"
 #include "GameConfiguration.h"
 #include "AddSoldierDialog.h"
+#include "SoldierModel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -36,6 +37,7 @@ private:
 
     Ui::MainWindow *ui;
     AddSoldierDialog addSoldierDialog;
+    SoldierModel soldierModel;
 };
 
 #endif // SOLDIER_APP_MAINWINDOW_H
