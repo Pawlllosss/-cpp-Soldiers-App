@@ -7,6 +7,7 @@
 #include "Map.h"
 #include "GameConfiguration.h"
 #include "AddSoldierDialog.h"
+#include "GameWindow.h"
 
 const QString MainWindow::SETTINGS_FILE_NAME = QString("settings.json");
 
@@ -16,9 +17,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->soldiersTable->setModel(&soldierModel);
     addSoldierDialog.setAvailableRanks(rankRepository.getRanks());
     connect(ui->addSoldierButton, SIGNAL(clicked()), this, SLOT(showAddSoldierDialog()));
+    connect(ui->deleteSoldierButton, SIGNAL(clicked()), this, SLOT(deleteSoldiers()));
     connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveGameConfiguration()));
     connect(ui->loadButton, SIGNAL(clicked()), this, SLOT(loadGameConfiguration()));
-    connect(ui->deleteSoldierButton, SIGNAL(clicked()), this, SLOT(deleteSoldiers()));
+    connect(ui->startButton, SIGNAL(clicked()), this, SLOT(startGame()));
     connect(&addSoldierDialog, &AddSoldierDialog::sendAddedSoldier, this, &MainWindow::addSoldier);
 }
 
@@ -68,6 +70,13 @@ void MainWindow::loadGameConfiguration() {
 
     GameConfiguration gameConfiguration = getGameConfigurationFromFile(file);
     setGameConfiguration(gameConfiguration);
+}
+
+void MainWindow::startGame() {
+    //TODO: block it when no soldiers added
+    hide();
+    GameWindow gameWindow(getSoldiersFromModel(), getMapFromSliders());
+    gameWindow.exec();
 }
 
 Map MainWindow::getMapFromSliders() const {

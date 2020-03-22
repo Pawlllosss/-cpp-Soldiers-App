@@ -28,6 +28,7 @@ private slots:
     void deleteSoldiers();
     void saveGameConfiguration();
     void loadGameConfiguration();
+    void startGame();
 
 private:
     Map getMapFromSliders() const;
