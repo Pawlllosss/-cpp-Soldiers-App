@@ -6,8 +6,6 @@
 #include "SoldierModel.h"
 
 SoldierModel::SoldierModel(QObject *parent) : QAbstractTableModel(parent) {
-    soldiers.emplace_back(Soldier("Stefan", "Wąs"));
-    soldiers.emplace_back(Soldier("Andrzej", "Golas"));
 }
 
 int SoldierModel::rowCount(const QModelIndex &parent) const {
@@ -94,8 +92,10 @@ QVariant SoldierModel::getFieldFromSoldier(const int row, const int column) cons
             return soldier.getFirstName();
         case 1:
             return soldier.getLastName();
-        case 2:
-            return QString("Rank");
+        case 2: {
+            const Rank &rank = soldier.getRank();
+            return rank.name;
+        }
         default:
             return QVariant();
     }
@@ -110,7 +110,11 @@ void SoldierModel::updateSoldierInModel(const QVariant &value, const int row, co
             soldier.setFirstName(newFieldValue);
         case 1:
             soldier.setLastName(newFieldValue);
-//            case 2:
-//                soldier.getRank();
+        case 2:
+            soldier.getRank();
     }
+}
+
+const std::vector<Soldier> &SoldierModel::getSoldiers() const {
+    return soldiers;
 }

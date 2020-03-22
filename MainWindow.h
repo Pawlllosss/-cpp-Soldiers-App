@@ -8,6 +8,7 @@
 #include "GameConfiguration.h"
 #include "AddSoldierDialog.h"
 #include "SoldierModel.h"
+#include "RankRepository.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -31,6 +32,7 @@ private slots:
 private:
     Map getMapFromSliders() const;
     int getValueFromSlider(QSlider *qSlider) const;
+    std::vector<Soldier> getSoldiersFromModel();
     void setGameConfiguration(const GameConfiguration &configuration);
     GameConfiguration getGameConfigurationFromFile(QFile &file) const;
     void deleteSelectedSoldiers(const QModelIndexList &selectedRows);
@@ -38,8 +40,9 @@ private:
     static const QString SETTINGS_FILE_NAME;
     Ui::MainWindow *ui;
     AddSoldierDialog addSoldierDialog;
-
     SoldierModel soldierModel;
+
+    RankRepository rankRepository;
 };
 
 #endif // SOLDIER_APP_MAINWINDOW_H

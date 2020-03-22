@@ -5,18 +5,18 @@
 #include <list>
 #include <QtCore/QJsonObject>
 #include "Map.h"
+#include "Soldier.h"
 
 struct GameConfiguration {
-    //TODO: soldiers will be implemented later
-//    GameConfiguration(const std::list<Soldier>& soldiers, const Map& map);
-    GameConfiguration(const Map &map);
+    GameConfiguration(const std::vector<Soldier>& soldiers, const Map& map);
     GameConfiguration(const QJsonObject& jsonGameConfiguration);
 
-    //TODO: soldiers will be implemented later
-//    std::list<Soldier> soldiers;
+    std::vector<Soldier> soldiers;
     Map map;
 
     QJsonObject convertToJson();
+
+    QJsonArray convertSoldiersToJsonArray();
 };
 
 #endif //SOLDIERAPP_GAMECONFIGURATION_H

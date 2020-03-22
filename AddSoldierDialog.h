@@ -17,12 +17,13 @@ class AddSoldierDialog : public QDialog
 public:
     AddSoldierDialog(QWidget *parent = nullptr);
     ~AddSoldierDialog();
+    void setAvailableRanks(const std::list<Rank> &ranks);
 
 signals:
     void sendAddedSoldier(const Soldier &soldier);
 
 private slots:
-    void passSoldierToParentWidget();
+    void sendSoldierToMainWindow();
 
 private:
     Ui::AddSoldierDialog *ui;

@@ -17,7 +17,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     void addSoldier(const Soldier &soldier);
     void deleteSoldier(const int row);
-
+    const std::vector<Soldier> &getSoldiers() const;
 private:
     std::vector<Soldier> soldiers;
 

@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
     ui->soldiersTable->setModel(&soldierModel);
+    addSoldierDialog.setAvailableRanks(rankRepository.getRanks());
     connect(ui->addSoldierButton, SIGNAL(clicked()), this, SLOT(showAddSoldierDialog()));
     connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(saveGameConfiguration()));
     connect(ui->loadButton, SIGNAL(clicked()), this, SLOT(loadGameConfiguration()));
@@ -48,8 +49,9 @@ void MainWindow::saveGameConfiguration() {
         return;
     }
 
+    std::vector<Soldier> soldiers = getSoldiersFromModel();
     Map map = getMapFromSliders();
-    GameConfiguration gameConfiguration(map);
+    GameConfiguration gameConfiguration(soldiers, map);
     QJsonObject gameConfigurationJson = gameConfiguration.convertToJson();
     QJsonDocument gameConfigurationJsonDocument(gameConfigurationJson);
 
@@ -78,6 +80,10 @@ Map MainWindow::getMapFromSliders() const {
 
 int MainWindow::getValueFromSlider(QSlider *qSlider) const {
     return qSlider->value();
+}
+
+std::vector<Soldier> MainWindow::getSoldiersFromModel() {
+    return soldierModel.getSoldiers();
 }
 
 GameConfiguration MainWindow::getGameConfigurationFromFile(QFile &file) const {
