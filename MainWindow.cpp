@@ -10,6 +10,7 @@
 #include "GameWindow.h"
 
 const QString MainWindow::SETTINGS_FILE_NAME = QString("settings.json");
+long MainWindow::SOLDER_ID_SEQUENCE = 1;
 
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -32,7 +33,9 @@ void MainWindow::showAddSoldierDialog() {
     addSoldierDialog.exec();
 }
 
-void MainWindow::addSoldier(const Soldier &soldier) {
+void MainWindow::addSoldier(Soldier soldier) {
+    soldier.setId(SOLDER_ID_SEQUENCE);
+    SOLDER_ID_SEQUENCE++;
     soldierModel.addSoldier(soldier);
 }
 

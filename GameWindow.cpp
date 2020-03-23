@@ -1,6 +1,6 @@
 #include "GameWindow.h"
 #include "./ui_GameWindow.h"
-#include "graphic/SoldierGraphic.h"
+#include "graphic/SoldierPixmap.h"
 #include "graphic/BulletGraphic.h"
 #include "graphic/GrenadeGraphic.h"
 #include "graphic/ExplosionGraphic.h"
@@ -14,9 +14,10 @@ GameWindow::GameWindow(const SoldierModel &soldierModel, const Map &map, QWidget
     ui->soldiersTable->setModel(&this->soldierModel);
     graphicsScene->setSceneRect(0, 0, 800, 600);
     ui->graphicsView->setScene(graphicsScene);
-    connect(ui->shootButton, SIGNAL(clicked()), this, SLOT(createBullet()));
+    connect(ui->shootButton, SIGNAL(clicked()), this, SLOT(shootBullets()));
     connect(ui->grenadeButton, SIGNAL(clicked()), this, SLOT(createGrenade()));
     setBackgroundColor();
+    createSoldiersVisual(soldierModel.getSoldiers());
     displaySoldiers();
 }
 
@@ -25,15 +26,35 @@ GameWindow::~GameWindow() {
     delete graphicsScene;
     //TODO clean items from scene or is it done automatically?
 }
-void GameWindow::displaySoldiers() {
-    double x = getHorizontalCenterPosition();
-    const std::vector<Soldier> &soldiers = soldierModel.getSoldiers();
 
-    foreach (auto Soldier, soldiers) {
-        auto *soldierGraphic = new SoldierGraphic;
-        soldierGraphic->setPos(x, getBottomPosition());
-        x += 80;
-        graphicsScene->addItem(soldierGraphic);
+void GameWindow::createSoldiersVisual(const std::vector<Soldier> &soldiers) {
+    size_t numberOfSoldiers = soldiers.size();
+
+    double xCenter = getHorizontalCenterPosition();
+    double distanceBetweenSoldiers = SoldierPixmap::PIXMAP_WIDTH * 2;
+    size_t distanceMultiplier = numberOfSoldiers / 2;
+    size_t xSoldierPosition = xCenter - SoldierPixmap::PIXMAP_WIDTH / 2 - (distanceBetweenSoldiers * distanceMultiplier);
+
+    foreach (auto soldier, soldiers) {
+        long soldierId = soldier.getId();
+        auto *soldierPixmap = createSoldierPixmap(xSoldierPosition);
+        auto *soldierVisual = new SoldierVisual(soldierId, soldierPixmap);
+        soldiersVisual.push_back(soldierVisual);
+
+        xSoldierPosition += distanceBetweenSoldiers;
+    }
+}
+SoldierPixmap *GameWindow::createSoldierPixmap(const size_t xSoldierPosition) {
+    auto *soldierPixmap = new SoldierPixmap;
+    soldierPixmap->setPos(xSoldierPosition, getBottomPosition());
+
+    return soldierPixmap;
+}
+
+void GameWindow::displaySoldiers() {
+    foreach (auto soldier, soldiersVisual) {
+        SoldierPixmap *item = soldier->getSoldierPixmap();
+        graphicsScene->addItem(item);
     }
 }
 
@@ -43,16 +64,64 @@ void GameWindow::setBackgroundColor() {
     graphicsScene->setBackgroundBrush(backgroundBrush);
 }
 
-void GameWindow::createBullet() {
-    auto bullet = new BulletGraphic();
-    bullet->setPos(getHorizontalCenterPosition(),getBottomPosition());
-    graphicsScene->addItem(bullet);
+std::vector<SoldierVisual*> GameWindow::getSelectedSoldiersVisual() {
+    std::vector<long> soldiersId = getSelectedSoldiersId();
+    std::vector<SoldierVisual*> selectedSoldiersVisual;
+
+    foreach (auto *soldierVisual, soldiersVisual) {
+        if (isSelected(soldierVisual ,soldiersId)) {
+            selectedSoldiersVisual.push_back(soldierVisual);
+        }
+    }
+
+    return selectedSoldiersVisual;
+}
+
+bool GameWindow::isSelected(SoldierVisual *soldierVisual, std::vector<long> ids) {
+    long soldierId = soldierVisual->getId();
+
+    foreach (auto id, ids) {
+        if (soldierId == id) {
+            return true;
+        }
+    }
+    return false;
+}
+
+std::vector<long> GameWindow::getSelectedSoldiersId() {
+    const QItemSelectionModel *selectionModel = ui->soldiersTable->selectionModel();
+    const QModelIndexList &selectedRows = selectionModel->selectedRows();
+    std::vector<long> ids;
+
+    foreach (QModelIndex index, selectedRows) {
+        const int row = index.row();
+        const Soldier &soldier = soldierModel.getSoldierByRow(row);
+        ids.push_back(soldier.getId());
+    }
+
+    return ids;
+}
+
+void GameWindow::shootBullets() {
+    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
+
+    foreach (auto *soldierVisual, soldiersVisual) {
+        SoldierPixmap *soldierPixmap = soldierVisual->getSoldierPixmap();
+        auto bullet = new BulletGraphic();
+        bullet->setPos(soldierPixmap->x() + SoldierPixmap::PIXMAP_WIDTH / 4, soldierPixmap->y());
+        graphicsScene->addItem(bullet);
+    }
 }
 
 void GameWindow::createGrenade() {
-    auto grenade = new GrenadeGraphic(getHorizontalCenterPosition(), getBottomPosition());
-    connect(grenade, &GrenadeGraphic::explode, this, &GameWindow::createExplosion);
-    graphicsScene->addItem(grenade);
+    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
+
+    foreach (auto *soldierVisual, soldiersVisual) {
+        SoldierPixmap *soldierPixmap = soldierVisual->getSoldierPixmap();
+        auto grenade = new GrenadeGraphic(soldierPixmap->x() + SoldierPixmap::PIXMAP_WIDTH / 4, soldierPixmap->y());
+        connect(grenade, &GrenadeGraphic::explode, this, &GameWindow::createExplosion);
+        graphicsScene->addItem(grenade);
+    }
 }
 
 void GameWindow::createExplosion(double x, double y) {

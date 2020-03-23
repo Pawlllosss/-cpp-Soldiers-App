@@ -19,12 +19,14 @@ public:
     void addSoldier(const Soldier &soldier);
     void deleteSoldier(const int row);
     const std::vector<Soldier> &getSoldiers() const;
-private:
-    std::vector<Soldier> soldiers;
+    const Soldier &getSoldierByRow(const int row) const;
 
+private:
     QVariant getFieldFromSoldier(const int row, const int column) const;
     QVariant tryToGetFieldFromSoldier(const QModelIndex &index) const;
     void updateSoldierInModel(const QVariant &value, const int row, const int column);
+
+    std::vector<Soldier> soldiers;
 };
 
 #endif //SOLDIERAPP_SOLDIERMODEL_H

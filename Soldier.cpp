@@ -1,9 +1,8 @@
 #include <QtCore/QJsonObject>
 #include "Soldier.h"
 
-Soldier::Soldier(const QString &firstName, const QString &lastName, const Rank &rank) : firstName(firstName),
-                                                                                        lastName(lastName),
-                                                                                        rank(rank) {
+Soldier::Soldier(const QString &firstName, const QString &lastName, const Rank &rank) : id(id),
+                                                        firstName(firstName), lastName(lastName), rank(rank) {
 }
 
 const QString &Soldier::getFirstName() const {
@@ -37,4 +36,12 @@ QJsonObject Soldier::convertToJson() {
     jsonSoldier["rank"] = rank.name;
 
     return jsonSoldier;
+}
+
+void Soldier::setId(long id) {
+    Soldier::id = id;
+}
+
+long Soldier::getId() const {
+    return id;
 }

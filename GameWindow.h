@@ -8,6 +8,7 @@
 #include "Soldier.h"
 #include "Map.h"
 #include "SoldierModel.h"
+#include "graphic/SoldierVisual.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class GameWindow; }
@@ -22,19 +23,25 @@ public:
     ~GameWindow();
 
 private slots:
-    void createBullet();
+    void shootBullets();
     void createGrenade();
     void createExplosion(const double x, const double y);
 
 private:
+    void createSoldiersVisual(const std::vector<Soldier> &soldiers);
     void displaySoldiers();
     void setBackgroundColor();
+    std::vector<long> getSelectedSoldiersId();
+    SoldierPixmap *createSoldierPixmap(const size_t numberOfSoldiers);
+    std::vector<SoldierVisual*> getSelectedSoldiersVisual();
+    bool isSelected(SoldierVisual *soldierVisual, std::vector<long> ids);
     double inline getHorizontalCenterPosition() const;
     double inline getBottomPosition() const;
 
     Ui::GameWindow *ui;
     QGraphicsScene *graphicsScene;
     SoldierModel soldierModel;
+    std::vector<SoldierVisual*> soldiersVisual;
     Map map;
 };
 

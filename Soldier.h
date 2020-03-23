@@ -14,9 +14,13 @@ public:
     void setLastName(const QString &lastName);
     const Rank &getRank() const;
     void setRank(const Rank &rank);
+    long getId() const;
+    void setId(long id);
+
     QJsonObject convertToJson();
 
 private:
+    long id;
     QString firstName;
     QString lastName;
 

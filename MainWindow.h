@@ -24,13 +24,14 @@ public:
 
 private slots:
     void showAddSoldierDialog();
-    void addSoldier(const Soldier &soldier);
+    void addSoldier(Soldier soldier);
     void deleteSoldiers();
     void saveGameConfiguration();
     void loadGameConfiguration();
     void startGame();
 
 private:
+    static long SOLDER_ID_SEQUENCE;
     Map getMapFromSliders() const;
     int getValueFromSlider(QSlider *qSlider) const;
 

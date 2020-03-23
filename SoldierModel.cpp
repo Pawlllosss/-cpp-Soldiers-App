@@ -1,7 +1,3 @@
-//
-// Created by pawlllosss on 17.03.2020.
-//
-
 #include <QtCore/QDebug>
 #include "SoldierModel.h"
 
@@ -89,7 +85,7 @@ QVariant SoldierModel::tryToGetFieldFromSoldier(const QModelIndex &index) const 
 }
 
 QVariant SoldierModel::getFieldFromSoldier(const int row, const int column) const {
-    const Soldier &soldier = soldiers.at(row);
+    const Soldier &soldier = getSoldierByRow(row);
 
     switch (column) {
         case 0:
@@ -122,3 +118,5 @@ void SoldierModel::updateSoldierInModel(const QVariant &value, const int row, co
 const std::vector<Soldier> &SoldierModel::getSoldiers() const {
     return soldiers;
 }
+
+const Soldier &SoldierModel::getSoldierByRow(const int row) const { return soldiers.at(row); }
