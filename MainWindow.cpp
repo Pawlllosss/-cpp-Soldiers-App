@@ -51,7 +51,7 @@ void MainWindow::saveGameConfiguration() {
         return;
     }
 
-    std::vector<Soldier> soldiers = getSoldiersFromModel();
+    std::vector<Soldier> soldiers = soldierModel.getSoldiers();
     Map map = getMapFromSliders();
     GameConfiguration gameConfiguration(soldiers, map);
     QJsonObject gameConfigurationJson = gameConfiguration.convertToJson();
@@ -75,7 +75,7 @@ void MainWindow::loadGameConfiguration() {
 void MainWindow::startGame() {
     //TODO: block it when no soldiers added
     hide();
-    GameWindow gameWindow(getSoldiersFromModel(), getMapFromSliders());
+    GameWindow gameWindow(soldierModel, getMapFromSliders());
     gameWindow.exec();
 }
 
@@ -89,10 +89,6 @@ Map MainWindow::getMapFromSliders() const {
 
 int MainWindow::getValueFromSlider(QSlider *qSlider) const {
     return qSlider->value();
-}
-
-std::vector<Soldier> MainWindow::getSoldiersFromModel() {
-    return soldierModel.getSoldiers();
 }
 
 GameConfiguration MainWindow::getGameConfigurationFromFile(QFile &file) const {

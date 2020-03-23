@@ -8,6 +8,10 @@
 SoldierModel::SoldierModel(QObject *parent) : QAbstractTableModel(parent) {
 }
 
+SoldierModel::SoldierModel(const SoldierModel &soldierModel, QObject *parent) : QAbstractTableModel(parent), soldiers(soldierModel.getSoldiers()) {
+
+}
+
 int SoldierModel::rowCount(const QModelIndex &parent) const {
     return soldiers.size();
 }

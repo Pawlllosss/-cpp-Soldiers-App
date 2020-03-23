@@ -1,7 +1,3 @@
-//
-// Created by pawlllosss on 22.03.2020.
-//
-
 #ifndef SOLDIERAPP_SOLDIERGRAPHIC_H
 #define SOLDIERAPP_SOLDIERGRAPHIC_H
 

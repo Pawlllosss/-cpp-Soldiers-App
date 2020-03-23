@@ -7,6 +7,7 @@
 #include <QtWidgets/QGraphicsScene>
 #include "Soldier.h"
 #include "Map.h"
+#include "SoldierModel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class GameWindow; }
@@ -17,20 +18,23 @@ class GameWindow : public QDialog
     Q_OBJECT
 
 public:
-    GameWindow(const std::vector<Soldier> &soldiers, const Map &map, QWidget *parent = nullptr);
+    GameWindow(const SoldierModel &soldierModel, const Map &map, QWidget *parent = nullptr);
     ~GameWindow();
 
-signals:
-
 private slots:
+    void createBullet();
+    void createGrenade();
+    void createExplosion(const double x, const double y);
 
 private:
     void displaySoldiers();
     void setBackgroundColor();
+    double inline getHorizontalCenterPosition() const;
+    double inline getBottomPosition() const;
 
     Ui::GameWindow *ui;
     QGraphicsScene *graphicsScene;
-    std::vector<Soldier> soldiers;
+    SoldierModel soldierModel;
     Map map;
 };
 

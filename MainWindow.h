@@ -33,7 +33,7 @@ private slots:
 private:
     Map getMapFromSliders() const;
     int getValueFromSlider(QSlider *qSlider) const;
-    std::vector<Soldier> getSoldiersFromModel();
+
     void setGameConfiguration(const GameConfiguration &configuration);
     GameConfiguration getGameConfigurationFromFile(QFile &file) const;
     void deleteSelectedSoldiers(const QModelIndexList &selectedRows);

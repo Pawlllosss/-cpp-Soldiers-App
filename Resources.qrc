@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/images">
         <file>source/soldier.png</file>
+        <file>source/bullet.png</file>
+        <file>source/grenade.png</file>
+        <file>source/explosion.png</file>
     </qresource>
 </RCC>

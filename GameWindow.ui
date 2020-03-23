@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>1200</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,77 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="QGraphicsView" name="graphicsView"/>
+    <widget class="QGraphicsView" name="graphicsView">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="sceneRect">
+      <rectf>
+       <x>0.000000000000000</x>
+       <y>0.000000000000000</y>
+       <width>800.000000000000000</width>
+       <height>600.000000000000000</height>
+      </rectf>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="soldiersManagementLayout">
+     <item>
+      <widget class="QTableView" name="soldiersTable">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::MultiSelection</enum>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QFormLayout" name="orderLayout">
+       <item row="0" column="0">
+        <widget class="QPushButton" name="shootButton">
+         <property name="text">
+          <string>Shoot</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="grenadeButton">
+         <property name="text">
+          <string>Throw grenade</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>Salute</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="pushButton_2">
+         <property name="text">
+          <string>Jump</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
