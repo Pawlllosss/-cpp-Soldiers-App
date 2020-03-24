@@ -26,6 +26,8 @@ private slots:
     void shootBullets();
     void createGrenade();
     void createExplosion(const double x, const double y);
+    void moveSoldierUp();
+    void moveSoldierDown();
 
 private:
     void createSoldiersVisual(const std::vector<Soldier> &soldiers);

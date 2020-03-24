@@ -6,16 +6,20 @@
 #include "graphic/ExplosionGraphic.h"
 #include <QDebug>
 
-GameWindow::GameWindow(const SoldierModel &soldierModel, const Map &map, QWidget *parent) : soldierModel(soldierModel), map(map),
-                                                                                    QDialog(parent),
-                                                                                    ui(new Ui::GameWindow),
-                                                                                    graphicsScene(new QGraphicsScene) {
+GameWindow::GameWindow(const SoldierModel &soldierModel, const Map &map, QWidget *parent) : soldierModel(soldierModel),
+                                                                                            map(map),
+                                                                                            QDialog(parent),
+                                                                                            ui(new Ui::GameWindow),
+                                                                                            graphicsScene(
+                                                                                                    new QGraphicsScene) {
     ui->setupUi(this);
     ui->soldiersTable->setModel(&this->soldierModel);
     graphicsScene->setSceneRect(0, 0, 800, 600);
     ui->graphicsView->setScene(graphicsScene);
     connect(ui->shootButton, SIGNAL(clicked()), this, SLOT(shootBullets()));
     connect(ui->grenadeButton, SIGNAL(clicked()), this, SLOT(createGrenade()));
+    connect(ui->moveUpButton, SIGNAL(clicked()), this, SLOT(moveSoldierUp()));
+    connect(ui->moveDownButton, SIGNAL(clicked()), this, SLOT(moveSoldierDown()));
     setBackgroundColor();
     createSoldiersVisual(soldierModel.getSoldiers());
     displaySoldiers();
@@ -33,22 +37,16 @@ void GameWindow::createSoldiersVisual(const std::vector<Soldier> &soldiers) {
     double xCenter = getHorizontalCenterPosition();
     double distanceBetweenSoldiers = SoldierPixmap::PIXMAP_WIDTH * 2;
     size_t distanceMultiplier = numberOfSoldiers / 2;
-    size_t xSoldierPosition = xCenter - SoldierPixmap::PIXMAP_WIDTH / 2 - (distanceBetweenSoldiers * distanceMultiplier);
+    size_t xSoldierPosition =
+            xCenter - SoldierPixmap::PIXMAP_WIDTH / 2 - (distanceBetweenSoldiers * distanceMultiplier);
+    size_t ySoldierPosition = getBottomPosition();
 
     foreach (auto soldier, soldiers) {
         long soldierId = soldier.getId();
-        auto *soldierPixmap = createSoldierPixmap(xSoldierPosition);
-        auto *soldierVisual = new SoldierVisual(soldierId, soldierPixmap);
+        auto *soldierVisual = new SoldierVisual(soldierId, xSoldierPosition, ySoldierPosition);
         soldiersVisual.push_back(soldierVisual);
-
         xSoldierPosition += distanceBetweenSoldiers;
     }
-}
-SoldierPixmap *GameWindow::createSoldierPixmap(const size_t xSoldierPosition) {
-    auto *soldierPixmap = new SoldierPixmap;
-    soldierPixmap->setPos(xSoldierPosition, getBottomPosition());
-
-    return soldierPixmap;
 }
 
 void GameWindow::displaySoldiers() {
@@ -64,9 +62,9 @@ void GameWindow::setBackgroundColor() {
     graphicsScene->setBackgroundBrush(backgroundBrush);
 }
 
-std::vector<SoldierVisual*> GameWindow::getSelectedSoldiersVisual() {
+std::vector<SoldierVisual *> GameWindow::getSelectedSoldiersVisual() {
     std::vector<long> soldiersId = getSelectedSoldiersId();
-    std::vector<SoldierVisual*> selectedSoldiersVisual;
+    std::vector<SoldierVisual *> selectedSoldiersVisual;
 
     foreach (auto *soldierVisual, soldiersVisual) {
         if (isSelected(soldierVisual ,soldiersId)) {
@@ -127,6 +125,22 @@ void GameWindow::createGrenade() {
 void GameWindow::createExplosion(double x, double y) {
     auto explosion = new ExplosionGraphic(x, y);
     graphicsScene->addItem(explosion);
+}
+
+void GameWindow::moveSoldierUp() {
+    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
+
+    foreach (auto *soldierVisual, soldiersVisual) {
+        soldierVisual->move(0, -20);
+    }
+}
+
+void GameWindow::moveSoldierDown() {
+    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
+
+    foreach (auto *soldierVisual, soldiersVisual) {
+        soldierVisual->move(0, 20);
+    }
 }
 
 double GameWindow::getHorizontalCenterPosition() const {
