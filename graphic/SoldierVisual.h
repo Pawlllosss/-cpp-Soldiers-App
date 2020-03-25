@@ -11,15 +11,17 @@ public:
     SoldierVisual(long id, const double x, const double y);
 
     ~SoldierVisual();
-    long getId() const;
+    void jump();
     void move(const double xDifference, const double yDifference);
-
+    long getId() const;
     SoldierPixmap *getSoldierPixmap() const;
 
+    static const double GRAVITY_CONSTANT; // TODO: should be holded in other class
     static const double SPEED;
 private slots:
 
 signals:
+    void jumpSoldierPixmap(const double x, const double y, const double speed);
     void moveSoldierPixmap(const double x, const double y, const double speed);
 
 private:
@@ -28,7 +30,6 @@ private:
     double x;
     double y;
     long id;
-
     SoldierPixmap * soldierPixmap;
 };
 

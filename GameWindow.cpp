@@ -18,6 +18,7 @@ GameWindow::GameWindow(const SoldierModel &soldierModel, const Map &map, QWidget
     ui->graphicsView->setScene(graphicsScene);
     connect(ui->shootButton, SIGNAL(clicked()), this, SLOT(shootBullets()));
     connect(ui->grenadeButton, SIGNAL(clicked()), this, SLOT(createGrenade()));
+    connect(ui->jumpButton, SIGNAL(clicked()), this, SLOT(jumpSoldier()));
     connect(ui->moveUpButton, SIGNAL(clicked()), this, SLOT(moveSoldierUp()));
     connect(ui->moveDownButton, SIGNAL(clicked()), this, SLOT(moveSoldierDown()));
     setBackgroundColor();
@@ -127,11 +128,19 @@ void GameWindow::createExplosion(double x, double y) {
     graphicsScene->addItem(explosion);
 }
 
+void GameWindow::jumpSoldier() {
+    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
+
+    foreach (auto *soldierVisual, soldiersVisual) {
+        soldierVisual->jump();
+    }
+}
+
 void GameWindow::moveSoldierUp() {
     const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
 
     foreach (auto *soldierVisual, soldiersVisual) {
-        soldierVisual->move(0, -20);
+        soldierVisual->move(0, -50);
     }
 }
 
@@ -139,7 +148,7 @@ void GameWindow::moveSoldierDown() {
     const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
 
     foreach (auto *soldierVisual, soldiersVisual) {
-        soldierVisual->move(0, 20);
+        soldierVisual->move(0, 50);
     }
 }
 
