@@ -12,6 +12,7 @@ SoldierVisual::SoldierVisual(const long id, const QString &name, const double x,
                                                                                                    timer(new QTimer){
     connect(this, &SoldierVisual::jumpSoldierPixmap, soldierPixmap, &SoldierPixmap::jump);
     connect(this, &SoldierVisual::moveSoldierPixmap, soldierPixmap, &SoldierPixmap::move);
+    connect(this, &SoldierVisual::saluteSoldierPixmap, soldierPixmap, &SoldierPixmap::salute);
     connect(soldierPixmap, &SoldierPixmap::blockingActionCompleted, this, &SoldierVisual::processCompletedBlockingAction);
     nameText->setPlainText(name);
     std::pair<double, double> nameTextPosition = calculateTextPosition(name, x, y);
@@ -53,6 +54,13 @@ void SoldierVisual::move(const double xDifference, const double yDifference) {
         y += yDifference;
         initMovingNameText();
         emit moveSoldierPixmap(x, y, MOVE_SPEED);
+    }
+}
+
+void SoldierVisual::salute() {
+    if (!isPerformingBlockingAction) {
+        isPerformingBlockingAction = true;
+        emit saluteSoldierPixmap();
     }
 }
 

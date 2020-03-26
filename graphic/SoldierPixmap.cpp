@@ -5,26 +5,32 @@
 const double SoldierPixmap::PIXMAP_WIDTH = 50;
 
 SoldierPixmap::SoldierPixmap(QGraphicsItem *parent) : timer(new QTimer(this)), QGraphicsPixmapItem(parent) {
-    const QPixmap &qPixmap = QPixmap(":/images/source/soldier.png");
-    setPixmap(qPixmap);
-    timer->start(50);
+    standingSoldierPixmap = new QPixmap(":/images/source/soldier.png");
+    salutingSoldierPixmap = new QPixmap(":/images/source/soldierSalute.png");
+    setPixmap(*standingSoldierPixmap);
 }
 
 void SoldierPixmap::jump(const double x, const double y, const double speed) {
-    isPerformingAction = true;
+    timer->start(50);
     jumpTime = 1;
     xDestination = x;
     yDestination = y;
     currentJumpSpeed = speed;
-    connect(timer,SIGNAL(timeout()),this, SLOT(processJump()));
+    connect(timer, SIGNAL(timeout()),this, SLOT(processJump()));
 }
 
 void SoldierPixmap::move(const double x, const double y, const double speed) {
-    isPerformingAction = true;
+    timer->start(50);
     xDestination = x;
     yDestination = y;
     movingSpeed = speed;
-    connect(timer,SIGNAL(timeout()),this, SLOT(processMove()));
+    connect(timer, SIGNAL(timeout()),this, SLOT(processMove()));
+}
+
+void SoldierPixmap::salute() {
+    timer->start(3000);
+    setPixmap(*salutingSoldierPixmap);
+    connect(timer, SIGNAL(timeout()),this, SLOT(endSalute()));
 }
 
 void SoldierPixmap::processJump() {
@@ -47,6 +53,12 @@ void SoldierPixmap::processMove() {
         disconnect(timer, SIGNAL(timeout()),this, SLOT(processMove()));
         emit blockingActionCompleted();
     }
+}
+
+void SoldierPixmap::endSalute() {
+    setPixmap(*standingSoldierPixmap);
+    disconnect(timer, SIGNAL(timeout()),this, SLOT(endSalute()));
+    emit blockingActionCompleted();
 }
 
 bool SoldierPixmap::moveInX() {

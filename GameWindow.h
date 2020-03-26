@@ -27,6 +27,7 @@ private slots:
     void createGrenade();
     void createExplosion(const double x, const double y);
     void jumpSoldier();
+    void salute();
     void moveSoldierUp();
     void moveSoldierDown();
 

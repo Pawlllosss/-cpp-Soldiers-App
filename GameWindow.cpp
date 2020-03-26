@@ -19,6 +19,7 @@ GameWindow::GameWindow(const SoldierModel &soldierModel, const Map &map, QWidget
     connect(ui->shootButton, SIGNAL(clicked()), this, SLOT(shootBullets()));
     connect(ui->grenadeButton, SIGNAL(clicked()), this, SLOT(createGrenade()));
     connect(ui->jumpButton, SIGNAL(clicked()), this, SLOT(jumpSoldier()));
+    connect(ui->saluteButton, SIGNAL(clicked()), this, SLOT(salute()));
     connect(ui->moveUpButton, SIGNAL(clicked()), this, SLOT(moveSoldierUp()));
     connect(ui->moveDownButton, SIGNAL(clicked()), this, SLOT(moveSoldierDown()));
     setBackgroundColor();
@@ -135,6 +136,13 @@ void GameWindow::jumpSoldier() {
 
     foreach (auto *soldierVisual, soldiersVisual) {
         soldierVisual->jump();
+    }
+}
+
+void GameWindow::salute() {
+    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
+        foreach (auto *soldierVisual, soldiersVisual) {
+        soldierVisual->salute();
     }
 }
 

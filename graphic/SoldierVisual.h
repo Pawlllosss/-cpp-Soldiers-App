@@ -17,6 +17,7 @@ public:
 
     void jump();
     void move(double xDifference, double yDifference);
+    void salute();
     long getId() const;
     SoldierPixmap *getSoldierPixmap() const;
     QGraphicsTextItem *getNameText() const;
@@ -32,8 +33,8 @@ public slots:
     void moveNameText();
 signals:
     void jumpSoldierPixmap(const double x, const double y, const double speed);
-
     void moveSoldierPixmap(const double x, const double y, const double speed);
+    void saluteSoldierPixmap();
 private:
     SoldierPixmap *createSoldierPixmap(const double x, const double y);
     std::pair<double, double> calculateTextPosition(const QString &name, const double x, const double y) const;
