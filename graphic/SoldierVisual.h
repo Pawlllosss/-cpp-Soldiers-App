@@ -9,8 +9,8 @@ class SoldierVisual: public QObject {
 
 public:
     SoldierVisual(long id, const double x, const double y);
-
     ~SoldierVisual();
+
     void jump();
     void move(const double xDifference, const double yDifference);
     long getId() const;
@@ -18,7 +18,9 @@ public:
 
     static const double GRAVITY_CONSTANT; // TODO: should be holded in other class
     static const double SPEED;
-private slots:
+
+public slots:
+    void processCompletedBlockingAction();
 
 signals:
     void jumpSoldierPixmap(const double x, const double y, const double speed);
@@ -27,9 +29,10 @@ signals:
 private:
     SoldierPixmap *createSoldierPixmap(const double x, const double y);
 
+    long id;
     double x;
     double y;
-    long id;
+    bool isPerformingBlockingAction = false;
     SoldierPixmap * soldierPixmap;
 };
 

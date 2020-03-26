@@ -8,6 +8,7 @@ SoldierVisual::SoldierVisual(long id, const double x, const double y) : id(id), 
                                                                         soldierPixmap(createSoldierPixmap(x, y)) {
     connect(this, &SoldierVisual::jumpSoldierPixmap, soldierPixmap, &SoldierPixmap::jump);
     connect(this, &SoldierVisual::moveSoldierPixmap, soldierPixmap, &SoldierPixmap::move);
+    connect(soldierPixmap, &SoldierPixmap::blockingActionCompleted, this, &SoldierVisual::processCompletedBlockingAction);
 }
 
 SoldierVisual::~SoldierVisual() {
@@ -22,14 +23,24 @@ SoldierPixmap *SoldierVisual::getSoldierPixmap() const {
     return soldierPixmap;
 }
 
+void SoldierVisual::processCompletedBlockingAction() {
+    isPerformingBlockingAction = false;
+}
+
 void SoldierVisual::jump() {
-    emit jumpSoldierPixmap(x, y, 11);
+    if (!isPerformingBlockingAction) {
+        isPerformingBlockingAction = true;
+        emit jumpSoldierPixmap(x, y, 11);
+    }
 }
 
 void SoldierVisual::move(const double xDifference, const double yDifference) {
-    x += xDifference;
-    y += yDifference;
-    emit moveSoldierPixmap(x, y, SPEED);
+    if (!isPerformingBlockingAction) {
+        isPerformingBlockingAction = true;
+        x += xDifference;
+        y += yDifference;
+        emit moveSoldierPixmap(x, y, SPEED);
+    }
 }
 
 SoldierPixmap *SoldierVisual::createSoldierPixmap(const double x, const double y) {

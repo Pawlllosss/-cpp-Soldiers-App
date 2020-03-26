@@ -11,25 +11,20 @@ SoldierPixmap::SoldierPixmap(QGraphicsItem *parent) : timer(new QTimer(this)), Q
 }
 
 void SoldierPixmap::jump(const double x, const double y, const double speed) {
-    //TODO: name it something like isPerformingBlockinAction action and put it in soldier visual
-    if (!isPerformingAction) {
-        isPerformingAction = true;
-        jumpTime = 1;
-        xDestination = x;
-        yDestination = y;
-        currentJumpSpeed = speed;
-        connect(timer,SIGNAL(timeout()),this, SLOT(processJump()));
-    }
+    isPerformingAction = true;
+    jumpTime = 1;
+    xDestination = x;
+    yDestination = y;
+    currentJumpSpeed = speed;
+    connect(timer,SIGNAL(timeout()),this, SLOT(processJump()));
 }
 
 void SoldierPixmap::move(const double x, const double y, const double speed) {
-    if (!isPerformingAction) {
-        isPerformingAction = true;
-        xDestination = x;
-        yDestination = y;
-        movingSpeed = speed;
-        connect(timer,SIGNAL(timeout()),this, SLOT(processMove()));
-    }
+    isPerformingAction = true;
+    xDestination = x;
+    yDestination = y;
+    movingSpeed = speed;
+    connect(timer,SIGNAL(timeout()),this, SLOT(processMove()));
 }
 
 void SoldierPixmap::processJump() {
@@ -40,8 +35,8 @@ void SoldierPixmap::processJump() {
         ++jumpTime;
     } else {
         setPos(x(), yDestination);
-        isPerformingAction = false;
         disconnect(timer,SIGNAL(timeout()),this, SLOT(processJump()));
+        emit blockingActionCompleted();
     }
 }
 
@@ -49,8 +44,8 @@ void SoldierPixmap::processMove() {
     bool hasFinished = moveInX() && moveInY();
 
     if (hasFinished) {
-        isPerformingAction = false;
         disconnect(timer, SIGNAL(timeout()),this, SLOT(processMove()));
+        emit blockingActionCompleted();
     }
 }
 
