@@ -44,7 +44,8 @@ void GameWindow::createSoldiersVisual(const std::vector<Soldier> &soldiers) {
 
     foreach (auto soldier, soldiers) {
         long soldierId = soldier.getId();
-        auto *soldierVisual = new SoldierVisual(soldierId, xSoldierPosition, ySoldierPosition);
+        QString soldierName = soldier.getFirstName() + " " + soldier.getLastName();
+        auto *soldierVisual = new SoldierVisual(soldierId, soldierName, xSoldierPosition, ySoldierPosition);
         soldiersVisual.push_back(soldierVisual);
         xSoldierPosition += distanceBetweenSoldiers;
     }
@@ -53,6 +54,7 @@ void GameWindow::createSoldiersVisual(const std::vector<Soldier> &soldiers) {
 void GameWindow::displaySoldiers() {
     foreach (auto soldier, soldiersVisual) {
         SoldierPixmap *item = soldier->getSoldierPixmap();
+        graphicsScene->addItem(soldier->getNameText());
         graphicsScene->addItem(item);
     }
 }
