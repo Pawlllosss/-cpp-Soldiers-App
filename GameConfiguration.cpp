@@ -1,13 +1,24 @@
 #include <QtCore/QJsonArray>
 #include "GameConfiguration.h"
 
-GameConfiguration::GameConfiguration(const std::vector<Soldier> &soldiers, const Map &map) : soldiers(soldiers),
-                                                                                             map(map) {
+GameConfiguration GameConfiguration::fromJson(const QJsonObject &jsonGameConfiguration) {
+    Map map = jsonGameConfiguration["map"].toObject();
+
+    const QJsonArray &soldiersJson = jsonGameConfiguration["soldiers"].toArray();
+    std::vector<Soldier> soldiers;
+
+
+    foreach(QJsonValue soldierJsonValue, soldiersJson){
+        QJsonObject soldierJson = soldierJsonValue.toObject();
+        Soldier soldier = Soldier::fromJson(soldierJson);
+        soldiers.push_back(soldier);
+    }
+
+    return GameConfiguration(soldiers, map);
 }
 
-//TODO: provide soldiers configuration
-GameConfiguration::GameConfiguration(const QJsonObject &jsonGameConfiguration)
-        : map(jsonGameConfiguration["map"].toObject()) {
+GameConfiguration::GameConfiguration(const std::vector<Soldier> &soldiers, const Map &map) : soldiers(soldiers),
+                                                                                             map(map) {
 }
 
 QJsonObject GameConfiguration::convertToJson() {

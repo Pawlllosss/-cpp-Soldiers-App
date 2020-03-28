@@ -5,13 +5,13 @@
 #include "RankRepository.h"
 
 RankRepository::RankRepository() {
-    ranks.push_front(Rank("Captain"));
-    ranks.push_front(Rank("Lieutenant"));
-    ranks.push_front(Rank("Sergeant"));
-    ranks.push_front(Rank("Corporal"));
-    ranks.push_front(Rank("Private"));
+    ranks.push_front(RankDescription("Captain", CAPTAIN));
+    ranks.push_front(RankDescription("Lieutenant", LIEUTENANT));
+    ranks.push_front(RankDescription("Sergeant", SERGEANT));
+    ranks.push_front(RankDescription("Corporal", CORPORAL));
+    ranks.push_front(RankDescription("Private", PRIVATE));
 }
 
-const std::list<Rank> &RankRepository::getRanks() const {
+const std::list<RankDescription> &RankRepository::getRanks() const {
     return ranks;
 }

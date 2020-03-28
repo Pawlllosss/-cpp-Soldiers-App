@@ -8,8 +8,9 @@
 #include "Soldier.h"
 
 struct GameConfiguration {
+    static GameConfiguration fromJson(const QJsonObject& jsonGameConfiguration);
+
     GameConfiguration(const std::vector<Soldier>& soldiers, const Map& map);
-    GameConfiguration(const QJsonObject& jsonGameConfiguration);
 
     std::vector<Soldier> soldiers;
     Map map;

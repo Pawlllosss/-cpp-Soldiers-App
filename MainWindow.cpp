@@ -99,11 +99,20 @@ GameConfiguration MainWindow::getGameConfigurationFromFile(QFile &file) const {
     QJsonDocument gameConfigurationJsonDocument = QJsonDocument::fromJson(byteArray);
     QJsonObject gameConfigurationJson = gameConfigurationJsonDocument.object();
 
-    return GameConfiguration(gameConfigurationJson);
+    return GameConfiguration::fromJson(gameConfigurationJson);
 }
 
 void MainWindow::setGameConfiguration(const GameConfiguration &configuration) {
     const Map &map = configuration.map;
+    const std::vector<Soldier> & soldiers = configuration.soldiers;
+    setMapSlidersValues(map);
+
+    foreach (auto soldier, soldiers) {
+        addSoldier(soldier);
+    }
+}
+
+void MainWindow::setMapSlidersValues(const Map &map) const {
     ui->redSlider->setValue(map.red);
     ui->greenSlider->setValue(map.green);
     ui->blueSlider->setValue(map.blue);

@@ -68,7 +68,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Rank:</string>
+      <string>RankDescription:</string>
      </property>
     </widget>
    </item>

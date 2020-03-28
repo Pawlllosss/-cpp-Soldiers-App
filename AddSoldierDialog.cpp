@@ -17,15 +17,15 @@ void AddSoldierDialog::sendSoldierToMainWindow() {
     QComboBox *comboBox = ui->rankComboBox;
     int currentIndex = comboBox->currentIndex();
     const QVariant &variant = comboBox->itemData(currentIndex);
-    Rank rank = variant.value<Rank>();
+    RankDescription rank = variant.value<RankDescription>();
     Soldier soldier(firstName, lastName, rank);
 
     emit sendAddedSoldier(soldier);
 }
 
 
-void AddSoldierDialog::setAvailableRanks(const std::list<Rank> &ranks) {
-    foreach (Rank rank, ranks) {
-        ui->rankComboBox->addItem(rank.name, QVariant::fromValue<Rank>(rank));
+void AddSoldierDialog::setAvailableRanks(const std::list<RankDescription> &ranks) {
+    foreach (RankDescription rank, ranks) {
+        ui->rankComboBox->addItem(rank.name, QVariant::fromValue<RankDescription>(rank));
     }
 }

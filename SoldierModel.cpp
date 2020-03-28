@@ -93,7 +93,7 @@ QVariant SoldierModel::getFieldFromSoldier(const int row, const int column) cons
         case 1:
             return soldier.getLastName();
         case 2: {
-            const Rank &rank = soldier.getRank();
+            const RankDescription &rank = soldier.getRank();
             return rank.name;
         }
         default:

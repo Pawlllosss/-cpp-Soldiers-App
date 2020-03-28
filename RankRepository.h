@@ -7,16 +7,16 @@
 
 
 #include <list>
-#include "Rank.h"
+#include "RankDescription.h"
 
 class RankRepository {
 public:
     RankRepository();
 
-    const std::list<Rank> &getRanks() const;
+    const std::list<RankDescription> &getRanks() const;
 
 private:
-    std::list<Rank> ranks;
+    std::list<RankDescription> ranks;
 };
 
 #endif //SOLDIERAPP_RANKREPOSITORY_H

@@ -45,6 +45,8 @@ private:
     SoldierModel soldierModel;
 
     RankRepository rankRepository;
+
+    void setMapSlidersValues(const Map &map) const;
 };
 
 #endif // SOLDIER_APP_MAINWINDOW_H

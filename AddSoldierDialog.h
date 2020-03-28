@@ -17,7 +17,7 @@ class AddSoldierDialog : public QDialog
 public:
     AddSoldierDialog(QWidget *parent = nullptr);
     ~AddSoldierDialog();
-    void setAvailableRanks(const std::list<Rank> &ranks);
+    void setAvailableRanks(const std::list<RankDescription> &ranks);
 
 signals:
     void sendAddedSoldier(const Soldier &soldier);
