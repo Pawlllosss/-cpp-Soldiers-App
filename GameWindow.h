@@ -53,7 +53,6 @@ private:
     QGraphicsScene *graphicsScene;
     SoldierModel soldierModel;
     std::vector<SoldierVisual*> soldiersVisual;
-    std::set<QPushButton*> pushButtons;
     std::map<QPushButton*, Rank> pushButtonMinimumRankMapping;
     Map map;
 

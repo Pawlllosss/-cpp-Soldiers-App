@@ -39,8 +39,8 @@ private:
     unsigned long jumpTime = 0;
     double xDestination;
     double yDestination;
-    double movingSpeed;
-    double currentJumpSpeed;
+    double moveSpeed;
+    double jumpSpeed;
 };
 
 

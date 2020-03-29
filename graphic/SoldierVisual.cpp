@@ -1,19 +1,20 @@
 #include "SoldierVisual.h"
 #include <QTimer>
 
-const double SoldierVisual::GRAVITY_CONSTANT = 0.5;
 const double SoldierVisual::MOVE_SPEED = 4;
 const double SoldierVisual::JUMP_SPEED = 8;
-const double SoldierVisual::Y_TEXT_DISTANCE = -55;
+const double SoldierVisual::Y_NAME_TEXT_OFFSET = -35;
+const double SoldierVisual::X_TEXT_OFFSET = -15;
 
 SoldierVisual::SoldierVisual(const long id, const QString &name, const double x, const double y) : id(id), x(x), y(y),
                                                                                                    soldierPixmap(createSoldierPixmap(x, y)),
                                                                                                    nameText(new QGraphicsTextItem),
-                                                                                                   timer(new QTimer){
+                                                                                                   timer(new QTimer) {
     connect(this, &SoldierVisual::jumpSoldierPixmap, soldierPixmap, &SoldierPixmap::jump);
     connect(this, &SoldierVisual::moveSoldierPixmap, soldierPixmap, &SoldierPixmap::move);
     connect(this, &SoldierVisual::saluteSoldierPixmap, soldierPixmap, &SoldierPixmap::salute);
-    connect(soldierPixmap, &SoldierPixmap::blockingActionCompleted, this, &SoldierVisual::processCompletedBlockingAction);
+    movableVisuals = createMovableVisuals();
+    connectBlockingActionCompletedOfMovableVisuals();
     nameText->setPlainText(name);
     std::pair<double, double> nameTextPosition = calculateTextPosition(name, x, y);
     nameText->setPos(nameTextPosition.first, nameTextPosition.second);
@@ -22,6 +23,8 @@ SoldierVisual::SoldierVisual(const long id, const QString &name, const double x,
 
 SoldierVisual::~SoldierVisual() {
     delete soldierPixmap;
+    delete nameText;
+    delete timer;
 }
 
 long SoldierVisual::getId() const {
@@ -43,7 +46,10 @@ void SoldierVisual::processCompletedBlockingAction() {
 void SoldierVisual::jump() {
     if (!isPerformingBlockingAction) {
         isPerformingBlockingAction = true;
-        emit jumpSoldierPixmap(x, y, JUMP_SPEED);
+
+        for (auto &visual : movableVisuals) {
+            visual.jump(x, y);
+        }
     }
 }
 
@@ -52,8 +58,10 @@ void SoldierVisual::move(const double xDifference, const double yDifference) {
         isPerformingBlockingAction = true;
         x += xDifference;
         y += yDifference;
-        initMovingNameText();
-        emit moveSoldierPixmap(x, y, MOVE_SPEED);
+
+        for (auto &visual : movableVisuals) {
+            visual.move(x, y);
+        }
     }
 }
 
@@ -61,6 +69,20 @@ void SoldierVisual::salute() {
     if (!isPerformingBlockingAction) {
         isPerformingBlockingAction = true;
         emit saluteSoldierPixmap();
+    }
+}
+
+std::vector<MovableVisual> SoldierVisual::createMovableVisuals() {
+    std::vector<MovableVisual> visuals;
+    visuals.emplace_back(MovableVisual(soldierPixmap, 0, 0, SoldierVisual::MOVE_SPEED, SoldierVisual::JUMP_SPEED));
+    visuals.emplace_back(MovableVisual(nameText, X_TEXT_OFFSET, Y_NAME_TEXT_OFFSET, SoldierVisual::MOVE_SPEED, SoldierVisual::JUMP_SPEED));
+
+    return visuals;
+}
+
+void SoldierVisual::connectBlockingActionCompletedOfMovableVisuals() {
+    for (const auto &visual : movableVisuals) {
+        connect(&visual, &MovableVisual::blockingActionCompleted, this, &SoldierVisual::processCompletedBlockingAction);
     }
 }
 
@@ -76,50 +98,7 @@ std::pair<double, double> SoldierVisual::calculateTextPosition(const QString &na
     const double distanceMultiplier = name.size() / 2;
     const double letterDistance = 8;
     const double xTextPosition = xCenter - (letterDistance * distanceMultiplier);
-    const double yTextPosition = y + Y_TEXT_DISTANCE;
+    const double yTextPosition = y + Y_NAME_TEXT_OFFSET;
 
     return std::pair<double, double>(xTextPosition, yTextPosition);
 }
-
-void SoldierVisual::initMovingNameText() {
-    connect(timer, &QTimer::timeout,this, &SoldierVisual::moveNameText);
-}
-
-//TODO: refactor it to avoid duplicates (maybe some class wrapping SoldierPixmap and label (moveable graphic, etc.)
-void SoldierVisual::moveNameText() {
-    bool hasFinished = moveInY();
-
-    if (hasFinished) {
-        disconnect(timer, &QTimer::timeout,this, &SoldierVisual::moveNameText);
-    }
-}
-
-bool SoldierVisual::moveInY() {
-    double destination = y + Y_TEXT_DISTANCE;
-    double yDistance = nameText->pos().y() - destination;
-    bool hasFinished = true;
-
-    if (checkIfMustMove(yDistance)) {
-        const double yDistanceDifference = calculateDistanceDifference(yDistance);
-        double distanceAfterMove;
-        if (isPerformingLastStep(yDistance)) {
-            distanceAfterMove = destination;
-        } else {
-            distanceAfterMove  = nameText->pos().y() + yDistanceDifference;
-            hasFinished = false;
-        }
-        nameText->setPos(nameText->pos().x(), distanceAfterMove);
-    }
-    return hasFinished;
-}
-
-bool SoldierVisual::isPerformingLastStep(double xDistance) const { return abs(xDistance) <= MOVE_SPEED; }
-
-const double SoldierVisual::calculateDistanceDifference(double distance) const {
-    return distance > 0 ? -MOVE_SPEED : MOVE_SPEED;
-}
-
-bool SoldierVisual::checkIfMustMove(double distance) const {
-    return abs(distance) > 0.01;
-}
-//TODO: refactor it!

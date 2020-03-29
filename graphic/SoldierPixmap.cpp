@@ -15,7 +15,7 @@ void SoldierPixmap::jump(const double x, const double y, const double speed) {
     jumpTime = 1;
     xDestination = x;
     yDestination = y;
-    currentJumpSpeed = speed;
+    jumpSpeed = speed;
     connect(timer, SIGNAL(timeout()),this, SLOT(processJump()));
 }
 
@@ -23,7 +23,7 @@ void SoldierPixmap::move(const double x, const double y, const double speed) {
     timer->start(50);
     xDestination = x;
     yDestination = y;
-    movingSpeed = speed;
+    moveSpeed = speed;
     connect(timer, SIGNAL(timeout()),this, SLOT(processMove()));
 }
 
@@ -97,17 +97,17 @@ bool SoldierPixmap::moveInY() {
     return hasFinished;
 }
 
-bool SoldierPixmap::isPerformingLastStep(double xDistance) const { return abs(xDistance) <= movingSpeed; }
+bool SoldierPixmap::isPerformingLastStep(double xDistance) const { return abs(xDistance) <= moveSpeed; }
 
 double SoldierPixmap::calculatePositionDuringJump() const {
-    return yDestination - currentJumpSpeed * jumpTime + SoldierVisual::GRAVITY_CONSTANT * jumpTime * jumpTime; }
+    return yDestination - jumpSpeed * jumpTime + MovableVisual::GRAVITY_CONSTANT * jumpTime * jumpTime; }
 
 bool SoldierPixmap::isAboveGround(double currentY) {
     return currentY < yDestination;
 }
 
 const double SoldierPixmap::calculateDistanceDifference(double distance) const {
-    return distance > 0 ? -movingSpeed : movingSpeed;
+    return distance > 0 ? -moveSpeed : moveSpeed;
 }
 
 bool SoldierPixmap::checkIfMustMove(double distance) const {
