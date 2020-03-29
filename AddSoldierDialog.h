@@ -27,6 +27,8 @@ private slots:
 
 private:
     Ui::AddSoldierDialog *ui;
+
+    void clearFields();
 };
 
 #endif //SOLDIERAPP_ADDSOLDIERDIALOG_H

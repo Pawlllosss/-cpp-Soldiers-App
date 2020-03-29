@@ -74,6 +74,11 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>firstNameInput</tabstop>
+  <tabstop>lastNameInput</tabstop>
+  <tabstop>rankComboBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

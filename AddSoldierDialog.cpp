@@ -20,6 +20,7 @@ void AddSoldierDialog::sendSoldierToMainWindow() {
     RankDescription rank = variant.value<RankDescription>();
     Soldier soldier(firstName, lastName, rank);
 
+    clearFields();
     emit sendAddedSoldier(soldier);
 }
 
@@ -28,4 +29,9 @@ void AddSoldierDialog::setAvailableRanks(const std::list<RankDescription> &ranks
     foreach (RankDescription rank, ranks) {
         ui->rankComboBox->addItem(rank.name, QVariant::fromValue<RankDescription>(rank));
     }
+}
+
+void AddSoldierDialog::clearFields() {
+    ui->firstNameInput->clear();
+    ui->lastNameInput->clear();
 }

@@ -124,8 +124,9 @@ void MainWindow::setGameConfiguration(const GameConfiguration &configuration) {
     const Map &map = configuration.map;
     const std::vector<Soldier> & soldiers = configuration.soldiers;
     setMapSlidersValues(map);
+    soldierModel.clear();
 
-    foreach (auto soldier, soldiers) {
+    for (auto soldier : soldiers) {
         addSoldier(soldier);
     }
 }
@@ -137,7 +138,7 @@ void MainWindow::setMapSlidersValues(const Map &map) const {
 }
 
 void MainWindow::deleteSelectedSoldiers(const QModelIndexList &selectedRows) {
-    foreach (QModelIndex index, selectedRows) {
+    for (QModelIndex index : selectedRows) {
         const int row = index.row();
         soldierModel.deleteSoldier(row);
     }

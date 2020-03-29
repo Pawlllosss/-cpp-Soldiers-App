@@ -33,27 +33,20 @@ private slots:
 private:
     static long SOLDIER_ID_SEQUENCE;
     static long MAX_SOLDIERS;
+    static const QString SETTINGS_FILE_NAME;
     Map getMapFromSliders() const;
     int getValueFromSlider(QSlider *qSlider) const;
-
     void setGameConfiguration(const GameConfiguration &configuration);
     GameConfiguration getGameConfigurationFromFile(QFile &file) const;
     void deleteSelectedSoldiers(const QModelIndexList &selectedRows);
+    void setMapSlidersValues(const Map &map) const;
+    bool atLeastOneSoldierAdded();
+    bool isEqualOrExceedsMaxSoldiersCount() const;
 
-    static const QString SETTINGS_FILE_NAME;
     Ui::MainWindow *ui;
     AddSoldierDialog addSoldierDialog;
     SoldierModel soldierModel;
-
     RankRepository rankRepository;
-
-    void setMapSlidersValues(const Map &map) const;
-
-    bool atLeastOneSoldierAdded();
-
-    void displayTooManySolidersWarning() const;
-
-    bool isEqualOrExceedsMaxSoldiersCount() const;
 };
 
 #endif // SOLDIER_APP_MAINWINDOW_H

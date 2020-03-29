@@ -67,6 +67,13 @@ void SoldierModel::addSoldier(const Soldier &soldier) {
     endInsertRows();
 }
 
+void SoldierModel::clear() {
+    int lastRow = rowCount() - 1;
+    beginRemoveRows(QModelIndex(), 0, lastRow);
+    soldiers.erase(soldiers.begin(), soldiers.end());
+    endRemoveRows();
+}
+
 void SoldierModel::deleteSoldier(const int row) {
     beginRemoveRows(QModelIndex(), row, row);
     soldiers.erase(soldiers.begin() + row);

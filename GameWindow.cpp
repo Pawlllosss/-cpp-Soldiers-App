@@ -16,7 +16,6 @@ GameWindow::GameWindow(const SoldierModel &soldierModel, const Map &map, QWidget
     ui->soldiersTable->setModel(&this->soldierModel);
     graphicsScene->setSceneRect(0, 0, 800, 600);
     ui->graphicsView->setScene(graphicsScene);
-    pushButtons = getPushButtonsSet();
     pushButtonMinimumRankMapping = getPushButtonMinimumRankMapping();
 
     QItemSelectionModel *soldiersTableSelectionModel = ui->soldiersTable->selectionModel();
@@ -35,19 +34,6 @@ GameWindow::GameWindow(const SoldierModel &soldierModel, const Map &map, QWidget
 GameWindow::~GameWindow() {
     delete ui;
     delete graphicsScene;
-}
-
-std::set<QPushButton*> GameWindow::getPushButtonsSet() {
-    std::set<QPushButton*> pushButtons;
-    pushButtons.insert(ui->moveUpButton);
-    pushButtons.insert(ui->moveDownButton);
-    pushButtons.insert(ui->shootButton);
-    pushButtons.insert(ui->grenadeButton);
-    pushButtons.insert(ui->jumpButton);
-    pushButtons.insert(ui->shootButton);
-    pushButtons.insert(ui->saluteButton);
-
-    return pushButtons;
 }
 
 std::map<QPushButton *, Rank> GameWindow::getPushButtonMinimumRankMapping() {
