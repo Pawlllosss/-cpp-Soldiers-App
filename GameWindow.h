@@ -5,6 +5,8 @@
 #include <QtCore/QArgument>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QGraphicsScene>
+#include <QtCore/QItemSelection>
+#include <set>
 #include "Soldier.h"
 #include "Map.h"
 #include "SoldierModel.h"
@@ -30,13 +32,15 @@ private slots:
     void salute();
     void moveSoldierUp();
     void moveSoldierDown();
+    void handleButtonsAvailability(const QItemSelection& selected, const QItemSelection& deselected);
 
 private:
+    std::set<QPushButton*> getPushButtonsSet();
+    std::map<QPushButton*, Rank> getPushButtonMinimumRankMapping();
     void createSoldiersVisual(const std::vector<Soldier> &soldiers);
     void displaySoldiers();
     void setBackgroundColor();
     std::vector<long> getSelectedSoldiersId();
-    SoldierPixmap *createSoldierPixmap(const size_t numberOfSoldiers);
     std::vector<SoldierVisual*> getSelectedSoldiersVisual();
     bool isSelected(SoldierVisual *soldierVisual, std::vector<long> ids);
     double inline getHorizontalCenterPosition() const;
@@ -46,7 +50,13 @@ private:
     QGraphicsScene *graphicsScene;
     SoldierModel soldierModel;
     std::vector<SoldierVisual*> soldiersVisual;
+    std::set<QPushButton*> pushButtons;
+    std::map<QPushButton*, Rank> pushButtonMinimumRankMapping;
     Map map;
+
+    std::vector<Soldier> getSelectedSoldiers() const;
+
+    Rank getMaxRankOfSoldiers(const std::vector<Soldier> &soldiers);
 };
 
 #endif //SOLDIERAPP_GAMEWINDOW_H

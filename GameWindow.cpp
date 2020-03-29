@@ -10,12 +10,17 @@ GameWindow::GameWindow(const SoldierModel &soldierModel, const Map &map, QWidget
                                                                                             map(map),
                                                                                             QDialog(parent),
                                                                                             ui(new Ui::GameWindow),
-                                                                                            graphicsScene(
-                                                                                                    new QGraphicsScene) {
+                                                                                            graphicsScene(new QGraphicsScene)
+                                                                                            {
     ui->setupUi(this);
     ui->soldiersTable->setModel(&this->soldierModel);
     graphicsScene->setSceneRect(0, 0, 800, 600);
     ui->graphicsView->setScene(graphicsScene);
+    pushButtons = getPushButtonsSet();
+    pushButtonMinimumRankMapping = getPushButtonMinimumRankMapping();
+
+    QItemSelectionModel *soldiersTableSelectionModel = ui->soldiersTable->selectionModel();
+    connect(soldiersTableSelectionModel, &QItemSelectionModel::selectionChanged, this, &GameWindow::handleButtonsAvailability);
     connect(ui->shootButton, SIGNAL(clicked()), this, SLOT(shootBullets()));
     connect(ui->grenadeButton, SIGNAL(clicked()), this, SLOT(createGrenade()));
     connect(ui->jumpButton, SIGNAL(clicked()), this, SLOT(jumpSoldier()));
@@ -30,7 +35,31 @@ GameWindow::GameWindow(const SoldierModel &soldierModel, const Map &map, QWidget
 GameWindow::~GameWindow() {
     delete ui;
     delete graphicsScene;
-    //TODO clean items from scene or is it done automatically?
+}
+
+std::set<QPushButton*> GameWindow::getPushButtonsSet() {
+    std::set<QPushButton*> pushButtons;
+    pushButtons.insert(ui->moveUpButton);
+    pushButtons.insert(ui->moveDownButton);
+    pushButtons.insert(ui->shootButton);
+    pushButtons.insert(ui->grenadeButton);
+    pushButtons.insert(ui->jumpButton);
+    pushButtons.insert(ui->shootButton);
+    pushButtons.insert(ui->saluteButton);
+
+    return pushButtons;
+}
+
+std::map<QPushButton *, Rank> GameWindow::getPushButtonMinimumRankMapping() {
+    std::map<QPushButton *, Rank> pushButtonMinimumRankMapping;
+    pushButtonMinimumRankMapping.insert(std::pair(ui->moveUpButton, PRIVATE));
+    pushButtonMinimumRankMapping.insert(std::pair(ui->moveDownButton, PRIVATE));
+    pushButtonMinimumRankMapping.insert(std::pair(ui->saluteButton, PRIVATE));
+    pushButtonMinimumRankMapping.insert(std::pair(ui->shootButton, CORPORAL));
+    pushButtonMinimumRankMapping.insert(std::pair(ui->grenadeButton, SERGEANT));
+    pushButtonMinimumRankMapping.insert(std::pair(ui->jumpButton, LIEUTENANT));
+
+    return pushButtonMinimumRankMapping;
 }
 
 void GameWindow::createSoldiersVisual(const std::vector<Soldier> &soldiers) {
@@ -43,7 +72,7 @@ void GameWindow::createSoldiersVisual(const std::vector<Soldier> &soldiers) {
             xCenter - SoldierPixmap::PIXMAP_WIDTH / 2 - (distanceBetweenSoldiers * distanceMultiplier);
     size_t ySoldierPosition = getBottomPosition();
 
-    foreach (auto soldier, soldiers) {
+    for (auto soldier : soldiers) {
         long soldierId = soldier.getId();
         QString soldierName = soldier.getFirstName() + " " + soldier.getLastName();
         auto *soldierVisual = new SoldierVisual(soldierId, soldierName, xSoldierPosition, ySoldierPosition);
@@ -53,7 +82,7 @@ void GameWindow::createSoldiersVisual(const std::vector<Soldier> &soldiers) {
 }
 
 void GameWindow::displaySoldiers() {
-    foreach (auto soldier, soldiersVisual) {
+    for (auto soldier : soldiersVisual) {
         SoldierPixmap *item = soldier->getSoldierPixmap();
         graphicsScene->addItem(soldier->getNameText());
         graphicsScene->addItem(item);
@@ -70,7 +99,7 @@ std::vector<SoldierVisual *> GameWindow::getSelectedSoldiersVisual() {
     std::vector<long> soldiersId = getSelectedSoldiersId();
     std::vector<SoldierVisual *> selectedSoldiersVisual;
 
-    foreach (auto *soldierVisual, soldiersVisual) {
+    for (auto *soldierVisual : soldiersVisual) {
         if (isSelected(soldierVisual ,soldiersId)) {
             selectedSoldiersVisual.push_back(soldierVisual);
         }
@@ -82,7 +111,7 @@ std::vector<SoldierVisual *> GameWindow::getSelectedSoldiersVisual() {
 bool GameWindow::isSelected(SoldierVisual *soldierVisual, std::vector<long> ids) {
     long soldierId = soldierVisual->getId();
 
-    foreach (auto id, ids) {
+    for (auto id : ids) {
         if (soldierId == id) {
             return true;
         }
@@ -91,23 +120,35 @@ bool GameWindow::isSelected(SoldierVisual *soldierVisual, std::vector<long> ids)
 }
 
 std::vector<long> GameWindow::getSelectedSoldiersId() {
-    const QItemSelectionModel *selectionModel = ui->soldiersTable->selectionModel();
-    const QModelIndexList &selectedRows = selectionModel->selectedRows();
+    const std::vector<Soldier> &selectedSoldiers = getSelectedSoldiers();
     std::vector<long> ids;
 
-    foreach (QModelIndex index, selectedRows) {
-        const int row = index.row();
-        const Soldier &soldier = soldierModel.getSoldierByRow(row);
-        ids.push_back(soldier.getId());
+    for (auto soldier : selectedSoldiers) {
+        long id = soldier.getId();
+        ids.push_back(id);
     }
 
     return ids;
 }
 
+std::vector<Soldier> GameWindow::getSelectedSoldiers() const {
+    const QItemSelectionModel *selectionModel = ui->soldiersTable->selectionModel();
+    const QModelIndexList &selectedRows = selectionModel->selectedRows();
+    std::vector<Soldier> selectedSoldiers;
+
+    for (QModelIndex index : selectedRows) {
+        const int row = index.row();
+        const Soldier &soldier = soldierModel.getSoldierByRow(row);
+        selectedSoldiers.push_back(soldier);
+    }
+
+    return selectedSoldiers;
+}
+
 void GameWindow::shootBullets() {
     const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
 
-    foreach (auto *soldierVisual, soldiersVisual) {
+    for (auto *soldierVisual : soldiersVisual) {
         SoldierPixmap *soldierPixmap = soldierVisual->getSoldierPixmap();
         auto bullet = new BulletGraphic();
         bullet->setPos(soldierPixmap->x() + SoldierPixmap::PIXMAP_WIDTH / 4, soldierPixmap->y());
@@ -118,7 +159,7 @@ void GameWindow::shootBullets() {
 void GameWindow::createGrenade() {
     const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
 
-    foreach (auto *soldierVisual, soldiersVisual) {
+    for (auto *soldierVisual : soldiersVisual) {
         SoldierPixmap *soldierPixmap = soldierVisual->getSoldierPixmap();
         auto grenade = new GrenadeGraphic(soldierPixmap->x() + SoldierPixmap::PIXMAP_WIDTH / 4, soldierPixmap->y());
         connect(grenade, &GrenadeGraphic::explode, this, &GameWindow::createExplosion);
@@ -134,14 +175,14 @@ void GameWindow::createExplosion(double x, double y) {
 void GameWindow::jumpSoldier() {
     const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
 
-    foreach (auto *soldierVisual, soldiersVisual) {
+    for (auto *soldierVisual : soldiersVisual) {
         soldierVisual->jump();
     }
 }
 
 void GameWindow::salute() {
     const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
-        foreach (auto *soldierVisual, soldiersVisual) {
+    for (auto *soldierVisual : soldiersVisual) {
         soldierVisual->salute();
     }
 }
@@ -149,7 +190,7 @@ void GameWindow::salute() {
 void GameWindow::moveSoldierUp() {
     const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
 
-    foreach (auto *soldierVisual, soldiersVisual) {
+    for (auto *soldierVisual : soldiersVisual) {
         soldierVisual->move(0, -50);
     }
 }
@@ -157,9 +198,36 @@ void GameWindow::moveSoldierUp() {
 void GameWindow::moveSoldierDown() {
     const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
 
-    foreach (auto *soldierVisual, soldiersVisual) {
+    for (auto *soldierVisual : soldiersVisual) {
         soldierVisual->move(0, 50);
     }
+}
+
+void GameWindow::handleButtonsAvailability(const QItemSelection& selected, const QItemSelection& deselected) {
+    const std::vector<Soldier> selectedSoldiers = getSelectedSoldiers();
+    const Rank maximumSelectedRank = getMaxRankOfSoldiers(selectedSoldiers);
+
+    for (auto mapping : pushButtonMinimumRankMapping) {
+        Rank buttonMinimumRank = mapping.second;
+        QPushButton *button = mapping.first;
+
+        if (buttonMinimumRank <= maximumSelectedRank) {
+            button->setEnabled(true);
+        } else {
+            button->setEnabled(false);
+        }
+    }
+}
+
+Rank GameWindow::getMaxRankOfSoldiers(const std::vector<Soldier> &soldiers) {
+    Rank maxRank = PRIVATE;
+
+    for (auto soldier : soldiers) {
+        Rank soldierRank = soldier.getRank().rank;
+        maxRank = soldierRank > maxRank ? soldierRank : maxRank;
+    }
+
+    return maxRank;
 }
 
 double GameWindow::getHorizontalCenterPosition() const {
