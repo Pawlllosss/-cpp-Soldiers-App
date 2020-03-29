@@ -31,9 +31,8 @@ public slots:
     void processCompletedBlockingAction();
 
 signals:
-    void jumpSoldierPixmap(const double x, const double y, const double speed);
-    void moveSoldierPixmap(const double x, const double y, const double speed);
     void saluteSoldierPixmap();
+
 private:
     std::vector<MovableVisual> createMovableVisuals();
     void connectBlockingActionCompletedOfMovableVisuals();

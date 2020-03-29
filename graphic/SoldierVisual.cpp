@@ -10,9 +10,8 @@ SoldierVisual::SoldierVisual(const long id, const QString &name, const double x,
                                                                                                    soldierPixmap(createSoldierPixmap(x, y)),
                                                                                                    nameText(new QGraphicsTextItem),
                                                                                                    timer(new QTimer) {
-    connect(this, &SoldierVisual::jumpSoldierPixmap, soldierPixmap, &SoldierPixmap::jump);
-    connect(this, &SoldierVisual::moveSoldierPixmap, soldierPixmap, &SoldierPixmap::move);
     connect(this, &SoldierVisual::saluteSoldierPixmap, soldierPixmap, &SoldierPixmap::salute);
+    connect(soldierPixmap, &SoldierPixmap::blockingActionCompleted, this, &SoldierVisual::processCompletedBlockingAction);
     movableVisuals = createMovableVisuals();
     connectBlockingActionCompletedOfMovableVisuals();
     nameText->setPlainText(name);

@@ -112,6 +112,9 @@
          <property name="text">
           <string>Order selected with biggest rank</string>
          </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
       </layout>
