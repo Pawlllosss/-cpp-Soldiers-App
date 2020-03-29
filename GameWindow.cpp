@@ -95,20 +95,51 @@ void GameWindow::setBackgroundColor() {
     graphicsScene->setBackgroundBrush(backgroundBrush);
 }
 
+std::vector<SoldierVisual *> GameWindow::getSelectedSoldiersVisualOfEligibleToPerformOrder() {
+    const std::vector<Soldier> &selectedSoldiers = getSelectedSoldiers();
+    const std::vector<Soldier> & eligibleSoldiers = getEligibleSoldierToPerformOrder(selectedSoldiers);
+    const std::vector<long> &eligibleSoldiersIds = convertSoldiersToIds(eligibleSoldiers);
+
+    return getSoldierVisualById(eligibleSoldiersIds);
+}
+
+std::vector<Soldier> GameWindow::getEligibleSoldierToPerformOrder(const std::vector<Soldier> &selectedSoldiers) {
+    std::vector<Soldier> eligibleSoldiers;
+    const Rank maxSelectedRank = getMaxRankOfSoldiers(selectedSoldiers);
+    bool canOrderBiggestRank = ui->orderBiggestRankCheckbox->isChecked();
+    bool canOrderLowerRank = ui->orderLowerRankCheckbox->isChecked();
+
+    if (canOrderBiggestRank) {
+        std::copy_if(selectedSoldiers.begin(), selectedSoldiers.end(), std::back_inserter(eligibleSoldiers),
+                     [&maxSelectedRank](const Soldier &soldier) { return soldier.getRank().rank == maxSelectedRank; });
+    }
+
+    if (canOrderLowerRank) {
+        std::copy_if(selectedSoldiers.begin(), selectedSoldiers.end(), std::back_inserter(eligibleSoldiers),
+                     [&maxSelectedRank](const Soldier &soldier) { return soldier.getRank().rank < maxSelectedRank; });
+    }
+
+    return eligibleSoldiers;
+}
+
 std::vector<SoldierVisual *> GameWindow::getSelectedSoldiersVisual() {
     std::vector<long> soldiersId = getSelectedSoldiersId();
-    std::vector<SoldierVisual *> selectedSoldiersVisual;
+    return getSoldierVisualById(soldiersId);
+}
+
+std::vector<SoldierVisual *> GameWindow::getSoldierVisualById(const std::vector<long> &soldiersId) {
+    std::vector<SoldierVisual *> soldiersVisualWithMatchingId;
 
     for (auto *soldierVisual : soldiersVisual) {
-        if (isSelected(soldierVisual ,soldiersId)) {
-            selectedSoldiersVisual.push_back(soldierVisual);
+        if (idMatches(soldierVisual, soldiersId)) {
+            soldiersVisualWithMatchingId.push_back(soldierVisual);
         }
     }
 
-    return selectedSoldiersVisual;
+    return soldiersVisualWithMatchingId;
 }
 
-bool GameWindow::isSelected(SoldierVisual *soldierVisual, std::vector<long> ids) {
+bool GameWindow::idMatches(SoldierVisual *soldierVisual, std::vector<long> ids) {
     long soldierId = soldierVisual->getId();
 
     for (auto id : ids) {
@@ -121,6 +152,10 @@ bool GameWindow::isSelected(SoldierVisual *soldierVisual, std::vector<long> ids)
 
 std::vector<long> GameWindow::getSelectedSoldiersId() {
     const std::vector<Soldier> &selectedSoldiers = getSelectedSoldiers();
+    return convertSoldiersToIds(selectedSoldiers);
+}
+
+std::vector<long> GameWindow::convertSoldiersToIds(const std::vector<Soldier> &selectedSoldiers) const {
     std::vector<long> ids;
 
     for (auto soldier : selectedSoldiers) {
@@ -146,7 +181,7 @@ std::vector<Soldier> GameWindow::getSelectedSoldiers() const {
 }
 
 void GameWindow::shootBullets() {
-    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
+    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisualOfEligibleToPerformOrder();
 
     for (auto *soldierVisual : soldiersVisual) {
         SoldierPixmap *soldierPixmap = soldierVisual->getSoldierPixmap();
@@ -157,7 +192,7 @@ void GameWindow::shootBullets() {
 }
 
 void GameWindow::createGrenade() {
-    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
+    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisualOfEligibleToPerformOrder();
 
     for (auto *soldierVisual : soldiersVisual) {
         SoldierPixmap *soldierPixmap = soldierVisual->getSoldierPixmap();
@@ -173,7 +208,7 @@ void GameWindow::createExplosion(double x, double y) {
 }
 
 void GameWindow::jumpSoldier() {
-    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
+    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisualOfEligibleToPerformOrder();
 
     for (auto *soldierVisual : soldiersVisual) {
         soldierVisual->jump();
@@ -181,14 +216,14 @@ void GameWindow::jumpSoldier() {
 }
 
 void GameWindow::salute() {
-    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
+    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisualOfEligibleToPerformOrder();
     for (auto *soldierVisual : soldiersVisual) {
         soldierVisual->salute();
     }
 }
 
 void GameWindow::moveSoldierUp() {
-    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
+    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisualOfEligibleToPerformOrder();
 
     for (auto *soldierVisual : soldiersVisual) {
         soldierVisual->move(0, -50);
@@ -196,7 +231,7 @@ void GameWindow::moveSoldierUp() {
 }
 
 void GameWindow::moveSoldierDown() {
-    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisual();
+    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisualOfEligibleToPerformOrder();
 
     for (auto *soldierVisual : soldiersVisual) {
         soldierVisual->move(0, 50);
@@ -205,13 +240,13 @@ void GameWindow::moveSoldierDown() {
 
 void GameWindow::handleButtonsAvailability(const QItemSelection& selected, const QItemSelection& deselected) {
     const std::vector<Soldier> selectedSoldiers = getSelectedSoldiers();
-    const Rank maximumSelectedRank = getMaxRankOfSoldiers(selectedSoldiers);
+    const Rank maxSelectedRank = getMaxRankOfSoldiers(selectedSoldiers);
 
     for (auto mapping : pushButtonMinimumRankMapping) {
         Rank buttonMinimumRank = mapping.second;
         QPushButton *button = mapping.first;
 
-        if (buttonMinimumRank <= maximumSelectedRank) {
+        if (buttonMinimumRank <= maxSelectedRank) {
             button->setEnabled(true);
         } else {
             button->setEnabled(false);

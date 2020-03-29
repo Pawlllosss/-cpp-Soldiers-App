@@ -55,45 +55,59 @@
      </item>
      <item>
       <layout class="QFormLayout" name="orderLayout">
-       <item row="0" column="0">
+       <item row="1" column="0">
         <widget class="QPushButton" name="shootButton">
          <property name="text">
           <string>Shoot</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item row="1" column="1">
         <widget class="QPushButton" name="grenadeButton">
          <property name="text">
           <string>Throw grenade</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item row="2" column="0">
         <widget class="QPushButton" name="saluteButton">
          <property name="text">
           <string>Salute</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="2" column="1">
         <widget class="QPushButton" name="jumpButton">
          <property name="text">
           <string>Jump</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="3" column="0">
         <widget class="QPushButton" name="moveUpButton">
          <property name="text">
           <string>Move Up</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="3" column="1">
         <widget class="QPushButton" name="moveDownButton">
          <property name="text">
           <string>Move Down</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="orderLowerRankCheckbox">
+         <property name="text">
+          <string>Order selected with lower rank</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QCheckBox" name="orderBiggestRankCheckbox">
+         <property name="text">
+          <string>Order selected with biggest rank</string>
          </property>
         </widget>
        </item>

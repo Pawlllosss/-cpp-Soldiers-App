@@ -42,7 +42,7 @@ private:
     void setBackgroundColor();
     std::vector<long> getSelectedSoldiersId();
     std::vector<SoldierVisual*> getSelectedSoldiersVisual();
-    bool isSelected(SoldierVisual *soldierVisual, std::vector<long> ids);
+    bool idMatches(SoldierVisual *soldierVisual, std::vector<long> ids);
     double inline getHorizontalCenterPosition() const;
     double inline getBottomPosition() const;
 
@@ -57,6 +57,14 @@ private:
     std::vector<Soldier> getSelectedSoldiers() const;
 
     Rank getMaxRankOfSoldiers(const std::vector<Soldier> &soldiers);
+
+    std::vector<SoldierVisual *> getSelectedSoldiersVisualOfEligibleToPerformOrder();
+
+    std::vector<Soldier> getEligibleSoldierToPerformOrder(const std::vector<Soldier> &selectedSoldiers);
+
+    std::vector<SoldierVisual *> getSoldierVisualById(const std::vector<long> &soldiersId);
+
+    std::vector<long> convertSoldiersToIds(const std::vector<Soldier> &selectedSoldiers) const;
 };
 
 #endif //SOLDIERAPP_GAMEWINDOW_H
