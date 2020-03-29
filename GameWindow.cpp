@@ -122,11 +122,6 @@ std::vector<Soldier> GameWindow::getEligibleSoldierToPerformOrder(const std::vec
     return eligibleSoldiers;
 }
 
-std::vector<SoldierVisual *> GameWindow::getSelectedSoldiersVisual() {
-    std::vector<long> soldiersId = getSelectedSoldiersId();
-    return getSoldierVisualById(soldiersId);
-}
-
 std::vector<SoldierVisual *> GameWindow::getSoldierVisualById(const std::vector<long> &soldiersId) {
     std::vector<SoldierVisual *> soldiersVisualWithMatchingId;
 
@@ -148,11 +143,6 @@ bool GameWindow::idMatches(SoldierVisual *soldierVisual, std::vector<long> ids) 
         }
     }
     return false;
-}
-
-std::vector<long> GameWindow::getSelectedSoldiersId() {
-    const std::vector<Soldier> &selectedSoldiers = getSelectedSoldiers();
-    return convertSoldiersToIds(selectedSoldiers);
 }
 
 std::vector<long> GameWindow::convertSoldiersToIds(const std::vector<Soldier> &selectedSoldiers) const {

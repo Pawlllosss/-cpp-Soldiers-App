@@ -31,7 +31,8 @@ private slots:
     void startGame();
 
 private:
-    static long SOLDER_ID_SEQUENCE;
+    static long SOLDIER_ID_SEQUENCE;
+    static long MAX_SOLDIERS;
     Map getMapFromSliders() const;
     int getValueFromSlider(QSlider *qSlider) const;
 
@@ -47,6 +48,12 @@ private:
     RankRepository rankRepository;
 
     void setMapSlidersValues(const Map &map) const;
+
+    bool atLeastOneSoldierAdded();
+
+    void displayTooManySolidersWarning() const;
+
+    bool isEqualOrExceedsMaxSoldiersCount() const;
 };
 
 #endif // SOLDIER_APP_MAINWINDOW_H

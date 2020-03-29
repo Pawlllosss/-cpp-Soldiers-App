@@ -10,7 +10,8 @@
 #include "GameWindow.h"
 
 const QString MainWindow::SETTINGS_FILE_NAME = QString("settings.json");
-long MainWindow::SOLDER_ID_SEQUENCE = 1;
+long MainWindow::SOLDIER_ID_SEQUENCE = 1;
+long MainWindow::MAX_SOLDIERS = 7;
 
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -30,12 +31,20 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::showAddSoldierDialog() {
-    addSoldierDialog.exec();
+    if (!isEqualOrExceedsMaxSoldiersCount()) {
+        addSoldierDialog.exec();
+    } else {
+        QMessageBox::warning(this, tr("Too many soldiers!"), "There can be at most " + QString::number(MAX_SOLDIERS) + " in the game!");
+    }
+}
+
+bool MainWindow::isEqualOrExceedsMaxSoldiersCount() const {
+    return soldierModel.rowCount() >= MAX_SOLDIERS;
 }
 
 void MainWindow::addSoldier(Soldier soldier) {
-    soldier.setId(SOLDER_ID_SEQUENCE);
-    SOLDER_ID_SEQUENCE++;
+    soldier.setId(SOLDIER_ID_SEQUENCE);
+    SOLDIER_ID_SEQUENCE++;
     soldierModel.addSoldier(soldier);
 }
 
@@ -76,10 +85,19 @@ void MainWindow::loadGameConfiguration() {
 }
 
 void MainWindow::startGame() {
-    //TODO: block it when no soldiers added
-    hide();
-    GameWindow gameWindow(soldierModel, getMapFromSliders());
-    gameWindow.exec();
+    if (soldierModel.rowCount() > MAX_SOLDIERS) {
+        QMessageBox::warning(this, tr("Too many soldiers!"), "There can be at most " + QString::number(MAX_SOLDIERS) + " in the game!");
+    } else if (!atLeastOneSoldierAdded()) {
+        QMessageBox::warning(this, tr("No soldier added!"), "You must add at least one soldier to the game!");
+    } else {
+        hide();
+        GameWindow gameWindow(soldierModel, getMapFromSliders());
+        gameWindow.exec();
+    }
+}
+
+bool MainWindow::atLeastOneSoldierAdded() {
+    return soldierModel.rowCount() > 0;
 }
 
 Map MainWindow::getMapFromSliders() const {
