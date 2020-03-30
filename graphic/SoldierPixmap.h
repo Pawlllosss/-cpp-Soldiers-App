@@ -6,8 +6,8 @@
 class SoldierPixmap: public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
-    SoldierPixmap(QGraphicsItem *parent = 0);
     const static double PIXMAP_WIDTH;
+    SoldierPixmap(QGraphicsItem *parent = 0);
 
 public slots:
     void salute();

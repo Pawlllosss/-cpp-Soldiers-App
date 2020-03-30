@@ -55,7 +55,6 @@ private:
     std::vector<SoldierVisual*> soldiersVisual;
     std::map<QPushButton*, Rank> pushButtonMinimumRankMapping;
     Map map;
-
 };
 
 #endif //SOLDIERAPP_GAMEWINDOW_H

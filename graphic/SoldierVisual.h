@@ -20,11 +20,6 @@ public:
     SoldierPixmap *getSoldierPixmap() const;
     QGraphicsTextItem *getNameText() const;
 
-    static const double MOVE_SPEED;
-    static const double JUMP_SPEED;
-    static const double Y_NAME_TEXT_OFFSET;
-    static const double X_TEXT_OFFSET;
-
 public slots:
     void processCompletedBlockingAction();
 
@@ -32,6 +27,10 @@ signals:
     void saluteSoldierPixmap();
 
 private:
+    static const double MOVE_SPEED;
+    static const double JUMP_SPEED;
+    static const double Y_NAME_TEXT_OFFSET;
+    static const double X_TEXT_OFFSET;
     std::vector<MovableVisual> createMovableVisuals();
     void connectBlockingActionCompletedOfMovableVisuals();
     SoldierPixmap *createSoldierPixmap(double x, double y);
