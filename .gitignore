@@ -2,3 +2,5 @@ cmake-build-debug/*
 
 .idea/*
 /source/soldierOrginal.png
+latex/*
+html/*
