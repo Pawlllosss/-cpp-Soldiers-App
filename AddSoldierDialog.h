@@ -26,9 +26,10 @@ private slots:
     void sendSoldierToMainWindow();
 
 private:
-    Ui::AddSoldierDialog *ui;
-
+    RankDescription getRankFromComboBox() const;
     void clearFields();
+
+    Ui::AddSoldierDialog *ui;
 };
 
 #endif //SOLDIERAPP_ADDSOLDIERDIALOG_H

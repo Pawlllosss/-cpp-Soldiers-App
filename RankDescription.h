@@ -6,6 +6,7 @@
 #include "Rank.h"
 
 struct RankDescription {
+
     static RankDescription fromJson(const QJsonObject& rankDescriptionJson);
 
     RankDescription() = default;

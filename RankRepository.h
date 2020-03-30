@@ -1,7 +1,3 @@
-//
-// Created by pawlllosss on 18.03.2020.
-//
-
 #ifndef SOLDIERAPP_RANKREPOSITORY_H
 #define SOLDIERAPP_RANKREPOSITORY_H
 

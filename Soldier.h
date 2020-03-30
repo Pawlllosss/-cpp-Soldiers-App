@@ -10,6 +10,8 @@ public:
 
     Soldier(const QString &firstName, const QString &lastName, const RankDescription &rank);
 
+    QJsonObject convertToJson();
+
     long getId() const;
     void setId(long id);
     const QString &getFirstName() const;
@@ -18,8 +20,6 @@ public:
     void setLastName(const QString &lastName);
     const RankDescription &getRank() const;
     void setRank(const RankDescription &rank);
-
-    QJsonObject convertToJson();
 
 private:
     long id;

@@ -12,12 +12,11 @@ struct GameConfiguration {
 
     GameConfiguration(const std::vector<Soldier>& soldiers, const Map& map);
 
+    QJsonObject convertToJson();
+    QJsonArray convertSoldiersToJsonArray();
+
     std::vector<Soldier> soldiers;
     Map map;
-
-    QJsonObject convertToJson();
-
-    QJsonArray convertSoldiersToJsonArray();
 };
 
 #endif //SOLDIERAPP_GAMECONFIGURATION_H

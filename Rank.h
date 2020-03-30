@@ -1,7 +1,3 @@
-//
-// Created by pawlllosss on 28.03.2020.
-//
-
 #ifndef SOLDIERAPP_RANK_H
 #define SOLDIERAPP_RANK_H
 

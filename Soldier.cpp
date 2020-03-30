@@ -13,6 +13,23 @@ Soldier::Soldier(const QString &firstName, const QString &lastName, const RankDe
                                                                                                    firstName(firstName), lastName(lastName), rank(rank) {
 }
 
+QJsonObject Soldier::convertToJson() {
+    QJsonObject jsonSoldier;
+    jsonSoldier["firstName"] = firstName;
+    jsonSoldier["lastName"] = lastName;
+    jsonSoldier["rank"] = rank.convertToJson();
+
+    return jsonSoldier;
+}
+
+long Soldier::getId() const {
+    return id;
+}
+
+void Soldier::setId(long id) {
+    Soldier::id = id;
+}
+
 const QString &Soldier::getFirstName() const {
     return firstName;
 }
@@ -35,21 +52,4 @@ const RankDescription &Soldier::getRank() const {
 
 void Soldier::setRank(const RankDescription &rank) {
     Soldier::rank = rank;
-}
-
-QJsonObject Soldier::convertToJson() {
-    QJsonObject jsonSoldier;
-    jsonSoldier["firstName"] = firstName;
-    jsonSoldier["lastName"] = lastName;
-    jsonSoldier["rank"] = rank.convertToJson();
-
-    return jsonSoldier;
-}
-
-void Soldier::setId(long id) {
-    Soldier::id = id;
-}
-
-long Soldier::getId() const {
-    return id;
 }

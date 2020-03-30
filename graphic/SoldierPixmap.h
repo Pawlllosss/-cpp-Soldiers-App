@@ -7,32 +7,18 @@ class SoldierPixmap: public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
     SoldierPixmap(QGraphicsItem *parent = 0);
-    //TODO: add destructor
-
     const static double PIXMAP_WIDTH;
 
 public slots:
-    void jump(const double x, const double y, const double speed);
-    void move(const double x, const double y, const double speed);
     void salute();
 
 signals:
     void blockingActionCompleted();
 
 private slots:
-    void processJump();
-    void processMove();
     void endSalute();
 
 private:
-    bool checkIfMustMove(double distance) const;
-    const double calculateDistanceDifference(double distance) const;
-    double calculatePositionDuringJump() const;
-    bool isAboveGround(double currentY);
-    bool moveInX();
-    bool moveInY();
-    bool isPerformingLastStep(double xDistance) const;
-
     QTimer *timer;
     QPixmap * standingSoldierPixmap;
     QPixmap * salutingSoldierPixmap;

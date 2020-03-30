@@ -7,8 +7,7 @@ GameConfiguration GameConfiguration::fromJson(const QJsonObject &jsonGameConfigu
     const QJsonArray &soldiersJson = jsonGameConfiguration["soldiers"].toArray();
     std::vector<Soldier> soldiers;
 
-
-    foreach(QJsonValue soldierJsonValue, soldiersJson){
+    for (QJsonValue soldierJsonValue : soldiersJson) {
         QJsonObject soldierJson = soldierJsonValue.toObject();
         Soldier soldier = Soldier::fromJson(soldierJson);
         soldiers.push_back(soldier);
@@ -34,7 +33,7 @@ QJsonObject GameConfiguration::convertToJson() {
 QJsonArray GameConfiguration::convertSoldiersToJsonArray() {
     QJsonArray jsonSoldiers;
 
-    foreach (auto soldier, soldiers) {
+    for (auto soldier : soldiers) {
             QJsonObject jsonSoldier = soldier.convertToJson();
             jsonSoldiers.push_back(jsonSoldier);
     }

@@ -1,7 +1,3 @@
-//
-// Created by pawlllosss on 18.03.2020.
-//
-
 #include "RankRepository.h"
 
 RankRepository::RankRepository() {

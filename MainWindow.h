@@ -34,14 +34,14 @@ private:
     static long SOLDIER_ID_SEQUENCE;
     static long MAX_SOLDIERS;
     static const QString SETTINGS_FILE_NAME;
+    bool isEqualOrExceedsMaxSoldiersCount() const;
+    bool atLeastOneSoldierAdded();
     Map getMapFromSliders() const;
     int getValueFromSlider(QSlider *qSlider) const;
-    void setGameConfiguration(const GameConfiguration &configuration);
     GameConfiguration getGameConfigurationFromFile(QFile &file) const;
-    void deleteSelectedSoldiers(const QModelIndexList &selectedRows);
+    void setGameConfiguration(const GameConfiguration &configuration);
     void setMapSlidersValues(const Map &map) const;
-    bool atLeastOneSoldierAdded();
-    bool isEqualOrExceedsMaxSoldiersCount() const;
+    void deleteSelectedSoldiers(const QModelIndexList &selectedRows);
 
     Ui::MainWindow *ui;
     AddSoldierDialog addSoldierDialog;

@@ -10,49 +10,10 @@ SoldierPixmap::SoldierPixmap(QGraphicsItem *parent) : timer(new QTimer(this)), Q
     setPixmap(*standingSoldierPixmap);
 }
 
-void SoldierPixmap::jump(const double x, const double y, const double speed) {
-    timer->start(50);
-    jumpTime = 1;
-    xDestination = x;
-    yDestination = y;
-    jumpSpeed = speed;
-    connect(timer, SIGNAL(timeout()),this, SLOT(processJump()));
-}
-
-void SoldierPixmap::move(const double x, const double y, const double speed) {
-    timer->start(50);
-    xDestination = x;
-    yDestination = y;
-    moveSpeed = speed;
-    connect(timer, SIGNAL(timeout()),this, SLOT(processMove()));
-}
-
 void SoldierPixmap::salute() {
     timer->start(3000);
     setPixmap(*salutingSoldierPixmap);
     connect(timer, SIGNAL(timeout()),this, SLOT(endSalute()));
-}
-
-void SoldierPixmap::processJump() {
-    double yPosition = calculatePositionDuringJump();
-
-    if (isAboveGround(yPosition)) {
-        setPos(x(), yPosition);
-        ++jumpTime;
-    } else {
-        setPos(x(), yDestination);
-        disconnect(timer,SIGNAL(timeout()),this, SLOT(processJump()));
-        emit blockingActionCompleted();
-    }
-}
-
-void SoldierPixmap::processMove() {
-    bool hasFinished = moveInX() && moveInY();
-
-    if (hasFinished) {
-        disconnect(timer, SIGNAL(timeout()),this, SLOT(processMove()));
-        emit blockingActionCompleted();
-    }
 }
 
 void SoldierPixmap::endSalute() {
@@ -61,55 +22,3 @@ void SoldierPixmap::endSalute() {
     emit blockingActionCompleted();
 }
 
-bool SoldierPixmap::moveInX() {
-    double xDistance = x() - xDestination;
-    bool hasFinished = true;
-
-    if (checkIfMustMove(xDistance)) {
-        const double xDistanceDifference = calculateDistanceDifference(xDistance);
-        double distanceAfterMove;
-        if (isPerformingLastStep(xDistance)) {
-            distanceAfterMove = xDestination;
-        } else {
-            distanceAfterMove  = x() + xDistanceDifference;
-            hasFinished = false;
-        }
-        setPos(distanceAfterMove, y());
-    }
-    return hasFinished;
-}
-
-bool SoldierPixmap::moveInY() {
-    double yDistance = y() - yDestination;
-    bool hasFinished = true;
-
-    if (checkIfMustMove(yDistance)) {
-        const double yDistanceDifference = calculateDistanceDifference(yDistance);
-        double distanceAfterMove;
-        if (isPerformingLastStep(yDistance)) {
-            distanceAfterMove = yDestination;
-        } else {
-            distanceAfterMove  = y() + yDistanceDifference;
-            hasFinished = false;
-        }
-        setPos(x(), distanceAfterMove);
-    }
-    return hasFinished;
-}
-
-bool SoldierPixmap::isPerformingLastStep(double xDistance) const { return abs(xDistance) <= moveSpeed; }
-
-double SoldierPixmap::calculatePositionDuringJump() const {
-    return yDestination - jumpSpeed * jumpTime + MovableVisual::GRAVITY_CONSTANT * jumpTime * jumpTime; }
-
-bool SoldierPixmap::isAboveGround(double currentY) {
-    return currentY < yDestination;
-}
-
-const double SoldierPixmap::calculateDistanceDifference(double distance) const {
-    return distance > 0 ? -moveSpeed : moveSpeed;
-}
-
-bool SoldierPixmap::checkIfMustMove(double distance) const {
-    return abs(distance) > 0.01;
-}

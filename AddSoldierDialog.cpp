@@ -1,7 +1,7 @@
 #include "AddSoldierDialog.h"
 #include "./ui_AddSoldierDialog.h"
 
-AddSoldierDialog::AddSoldierDialog(QWidget *parent) :QDialog(parent), ui(new Ui::AddSoldierDialog) {
+AddSoldierDialog::AddSoldierDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AddSoldierDialog) {
     ui->setupUi(this);
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(sendSoldierToMainWindow()));
 }
@@ -13,15 +13,19 @@ AddSoldierDialog::~AddSoldierDialog() {
 void AddSoldierDialog::sendSoldierToMainWindow() {
     QString firstName = ui->firstNameInput->text();
     QString lastName = ui->lastNameInput->text();
-    
-    QComboBox *comboBox = ui->rankComboBox;
-    int currentIndex = comboBox->currentIndex();
-    const QVariant &variant = comboBox->itemData(currentIndex);
-    RankDescription rank = variant.value<RankDescription>();
+    RankDescription rank = getRankFromComboBox();
     Soldier soldier(firstName, lastName, rank);
 
     clearFields();
     emit sendAddedSoldier(soldier);
+}
+
+RankDescription AddSoldierDialog::getRankFromComboBox() const {
+    QComboBox *comboBox = ui->rankComboBox;
+    int currentIndex = comboBox->currentIndex();
+    const QVariant &variant = comboBox->itemData(currentIndex);
+    RankDescription rank = variant.value<RankDescription>();
+    return rank;
 }
 
 

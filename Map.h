@@ -8,12 +8,11 @@ struct Map {
     Map(int red, int green, int blue);
     Map(const QJsonObject& jsonMap);
 
+    QJsonObject convertToJson();
 
     int red;
     int green;
     int blue;
-
-    QJsonObject convertToJson();
 };
 
 #endif //SOLDIERAPP_MAP_H

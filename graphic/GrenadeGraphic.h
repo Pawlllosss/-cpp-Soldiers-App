@@ -3,9 +3,6 @@
 
 #include <QtWidgets/QGraphicsPixmapItem>
 
-//TODO: could use something for base class (isOutsideScreen)
-//TODO: as well as for time unit (50ms)
-//TODO: and for clean object
 class GrenadeGraphic: public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 

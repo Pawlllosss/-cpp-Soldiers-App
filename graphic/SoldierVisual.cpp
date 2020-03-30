@@ -26,18 +26,6 @@ SoldierVisual::~SoldierVisual() {
     delete timer;
 }
 
-long SoldierVisual::getId() const {
-    return id;
-}
-
-QGraphicsTextItem *SoldierVisual::getNameText() const {
-    return nameText;
-}
-
-SoldierPixmap *SoldierVisual::getSoldierPixmap() const {
-    return soldierPixmap;
-}
-
 void SoldierVisual::processCompletedBlockingAction() {
     isPerformingBlockingAction = false;
 }
@@ -69,6 +57,18 @@ void SoldierVisual::salute() {
         isPerformingBlockingAction = true;
         emit saluteSoldierPixmap();
     }
+}
+
+long SoldierVisual::getId() const {
+    return id;
+}
+
+QGraphicsTextItem *SoldierVisual::getNameText() const {
+    return nameText;
+}
+
+SoldierPixmap *SoldierVisual::getSoldierPixmap() const {
+    return soldierPixmap;
 }
 
 std::vector<MovableVisual> SoldierVisual::createMovableVisuals() {

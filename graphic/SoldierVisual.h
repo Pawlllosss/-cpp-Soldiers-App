@@ -1,8 +1,6 @@
 #ifndef SOLDIERAPP_SOLDIERVISUAL_H
 #define SOLDIERAPP_SOLDIERVISUAL_H
 
-
-
 #include <QtWidgets/QLabel>
 #include <QtCore/QTimer>
 #include "SoldierPixmap.h"
@@ -12,7 +10,7 @@ class SoldierVisual: public QObject {
     Q_OBJECT
 
 public:
-    SoldierVisual(const long id, const QString &name, const double x, const double y);
+    SoldierVisual(long id, const QString &name, double x, double y);
     ~SoldierVisual();
 
     void jump();
@@ -36,8 +34,8 @@ signals:
 private:
     std::vector<MovableVisual> createMovableVisuals();
     void connectBlockingActionCompletedOfMovableVisuals();
-    SoldierPixmap *createSoldierPixmap(const double x, const double y);
-    std::pair<double, double> calculateTextPosition(const QString &name, const double x, const double y) const;
+    SoldierPixmap *createSoldierPixmap(double x, double y);
+    std::pair<double, double> calculateTextPosition(const QString &name, double x, double y) const;
 
     QTimer *timer;
     long id;
