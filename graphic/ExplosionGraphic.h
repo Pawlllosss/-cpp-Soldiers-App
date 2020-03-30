@@ -3,6 +3,9 @@
 
 #include <QtWidgets/QGraphicsPixmapItem>
 
+/**
+ * Fading pixmap that represent explosion
+ */
 class ExplosionGraphic: public QObject, public QGraphicsPixmapItem {
 Q_OBJECT
 

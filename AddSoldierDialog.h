@@ -10,6 +10,9 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class AddSoldierDialog; }
 QT_END_NAMESPACE
 
+/**
+ * Responsible for rendering dialog window for adding soldier.
+ */
 class AddSoldierDialog : public QDialog
 {
     Q_OBJECT
@@ -17,9 +20,17 @@ class AddSoldierDialog : public QDialog
 public:
     AddSoldierDialog(QWidget *parent = nullptr);
     ~AddSoldierDialog();
+    /**
+     * Populates combobox with ranks
+     * @param ranks
+     */
     void setAvailableRanks(const std::list<RankDescription> &ranks);
 
 signals:
+    /**
+    * Signal with information about added soldier
+    * @param soldier added Soldier
+    */
     void sendAddedSoldier(const Soldier &soldier);
 
 private slots:

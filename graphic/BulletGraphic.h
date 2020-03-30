@@ -4,6 +4,9 @@
 
 #include <QtWidgets/QGraphicsPixmapItem>
 
+/**
+ * Pixmap representation of moving bullet
+ */
 class BulletGraphic: public QObject, public QGraphicsPixmapItem {
 Q_OBJECT
 

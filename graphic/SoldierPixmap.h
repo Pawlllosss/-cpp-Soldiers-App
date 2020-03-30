@@ -3,16 +3,28 @@
 
 #include <QtWidgets/QGraphicsRectItem>
 
+/**
+ * Pixmap representing soldier
+ */
 class SoldierPixmap: public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
 public:
+    /**
+     * WIDTH of pixmap
+     */
     const static double PIXMAP_WIDTH;
     SoldierPixmap(QGraphicsItem *parent = 0);
 
 public slots:
+    /**
+     * inits salute action (blocking action)
+     */
     void salute();
 
 signals:
+    /**
+     * sends information about end of blocking action
+     */
     void blockingActionCompleted();
 
 private slots:

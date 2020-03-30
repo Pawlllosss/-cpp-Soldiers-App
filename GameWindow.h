@@ -16,6 +16,9 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class GameWindow; }
 QT_END_NAMESPACE
 
+/**
+ * Class that represent game window, with buttons for ordering soldiers, table with soldiers and graphics scene
+ */
 class GameWindow : public QDialog
 {
     Q_OBJECT

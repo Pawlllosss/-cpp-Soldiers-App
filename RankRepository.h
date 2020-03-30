@@ -4,10 +4,17 @@
 #include <list>
 #include "RankDescription.h"
 
+/**
+ * Class that contains prepared list of RankDescription
+ */
 class RankRepository {
 public:
     RankRepository();
 
+    /**
+     *
+     * @return prepared list of RankDescription
+     */
     const std::list<RankDescription> &getRanks() const;
 
 private:

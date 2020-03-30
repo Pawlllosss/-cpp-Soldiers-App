@@ -4,9 +4,15 @@
 
 #include <QtWidgets/QGraphicsItem>
 
+/**
+ * Graphical representation (for example pixmap or text), which can move or jump.
+ */
 class MovableVisual: public QObject {
     Q_OBJECT
 public:
+    /**
+     * Value of gravity constant used for jump
+     */
     static const double GRAVITY_CONSTANT;
 
     MovableVisual(QGraphicsItem *graphicsItem, double xOffset, double yOffset, double moveSpeed, double jumpSpeed);
@@ -23,10 +29,23 @@ public:
     void setJumpSpeed(double jumpSpeed);
 
 public slots:
+    /**
+     * inits jump (blocking action)
+     * @param x destination
+     * @param y destination
+     */
     void jump(const double x, const double y);
+    /**
+     * inits move (blocking action)
+     * @param x destination
+     * @param y destination
+     */
     void move(const double x, const double y);
 
 signals:
+    /**
+     * Handles end of blocking action
+     */
     void blockingActionCompleted();
 
 private slots:

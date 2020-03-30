@@ -6,6 +6,10 @@
 #include "SoldierPixmap.h"
 #include "MovableVisual.h"
 
+/**
+ * Represent soldier in graphical form with pixmap and text representing name, which can perform actions such as jump,
+ * shoot, throw grenade, move.
+ */
 class SoldierVisual: public QObject {
     Q_OBJECT
 
@@ -13,17 +17,32 @@ public:
     SoldierVisual(long id, const QString &name, double x, double y);
     ~SoldierVisual();
 
+    /**
+     * Performs jump action (blocking action)
+     */
     void jump();
+    /**
+    * Performs move action (blocking action)
+    */
     void move(double xDifference, double yDifference);
+    /**
+    * Performs salute action (blocking action)
+    */
     void salute();
     long getId() const;
     SoldierPixmap *getSoldierPixmap() const;
     QGraphicsTextItem *getNameText() const;
 
 public slots:
+    /**
+     * Handles end of blocking action
+     */
     void processCompletedBlockingAction();
 
 signals:
+    /**
+     * Signal that starts salute (blocking action)
+     */
     void saluteSoldierPixmap();
 
 private:

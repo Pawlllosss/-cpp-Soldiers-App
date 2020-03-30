@@ -14,6 +14,11 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+/**
+ * Class that renders main window shown after application start. Is responsible for preparing widgets
+ * for game configuration: map color sliders, soldiers names/ranks table, invoking dialog for adding new soldiers and
+ * loading/saving game configuration from/to settings.json file.
+ */
 class MainWindow : public QMainWindow
 {
 Q_OBJECT
