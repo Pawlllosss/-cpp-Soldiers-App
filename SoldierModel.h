@@ -50,6 +50,7 @@ private:
     QVariant tryToGetFieldFromSoldier(const QModelIndex &index) const;
     void updateSoldierInModel(const QVariant &value, const int row, const int column);
 
-    std::vector<Soldier> soldiers;};
+    std::vector<Soldier> soldiers;
+};
 
 #endif //SOLDIERAPP_SOLDIERMODEL_H
