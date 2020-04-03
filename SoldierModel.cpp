@@ -108,10 +108,13 @@ void SoldierModel::updateSoldierInModel(const QVariant &value, const int row, co
     switch (column) {
         case 0:
             soldier.setFirstName(newFieldValue);
+            break;
         case 1:
             soldier.setLastName(newFieldValue);
+            break;
         case 2:
             soldier.getRank();
+            break;
     }
 }
 
