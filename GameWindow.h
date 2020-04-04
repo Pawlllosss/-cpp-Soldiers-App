@@ -52,12 +52,16 @@ private:
     std::vector<SoldierVisual *> getSoldierVisualById(const std::vector<long> &soldiersId);
     std::vector<long> convertSoldiersToIds(const std::vector<Soldier> &selectedSoldiers) const;
 
+    double moveDistanceBasedOnRank(Rank rank);
+
     Ui::GameWindow *ui;
     QGraphicsScene *graphicsScene;
     SoldierModel soldierModel;
     std::vector<SoldierVisual*> soldiersVisual;
     std::map<QPushButton*, Rank> pushButtonMinimumRankMapping;
     Map map;
+
+    SoldierVisual *getSoldierVisual(const Soldier &soldier);
 };
 
 #endif //SOLDIERAPP_GAMEWINDOW_H

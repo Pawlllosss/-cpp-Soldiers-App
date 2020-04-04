@@ -199,18 +199,54 @@ void GameWindow::salute() {
 }
 
 void GameWindow::moveSoldierUp() {
-    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisualOfEligibleToPerformOrder();
+    const std::vector<Soldier> &selectedSoldiers = getSelectedSoldiers();
+    const std::vector<Soldier> & eligibleSoldiers = getEligibleSoldierToPerformOrder(selectedSoldiers);
+    std::vector<SoldierVisual *> soldierVisuals;
 
-    for (auto *soldierVisual : soldiersVisual) {
-        soldierVisual->move(0, -50);
+    for (auto &soldier : eligibleSoldiers) {
+        Rank rank = soldier.getRank().rank;
+        double yDiff = moveDistanceBasedOnRank(rank);
+        SoldierVisual *soldierVisual = getSoldierVisual(soldier);
+
+        soldierVisual->move(0, -yDiff);
+    }
+}
+
+SoldierVisual *GameWindow::getSoldierVisual(const Soldier &soldier) {
+    std::vector<long> soldierId;
+    soldierId.push_back(soldier.getId());
+
+    std::vector<SoldierVisual *> vector = getSoldierVisualById(soldierId);
+    SoldierVisual *&soldierVisual = vector.at(0);
+    return soldierVisual;
+}
+
+double GameWindow::moveDistanceBasedOnRank(Rank rank) {
+    switch (rank) {
+        case PRIVATE:
+        case CORPORAL:
+            return 10;
+        case SERGEANT:
+            return 20;
+        case LIEUTENANT:
+        case CAPTAIN:
+            return 30;
+        default:
+            return 10;
     }
 }
 
 void GameWindow::moveSoldierDown() {
-    const std::vector<SoldierVisual *> &soldiersVisual = getSelectedSoldiersVisualOfEligibleToPerformOrder();
+    const std::vector<Soldier> &selectedSoldiers = getSelectedSoldiers();
+    const std::vector<Soldier> & eligibleSoldiers = getEligibleSoldierToPerformOrder(selectedSoldiers);
+    std::vector<SoldierVisual *> soldierVisuals;
 
-    for (auto *soldierVisual : soldiersVisual) {
-        soldierVisual->move(0, 50);
+    for (auto &soldier : eligibleSoldiers) {
+        Rank rank = soldier.getRank().rank;
+        double yDiff = moveDistanceBasedOnRank(rank);
+        SoldierVisual *soldierVisual = getSoldierVisual(soldier);
+
+        soldierVisual->move(0, yDiff);
     }
 }
 
